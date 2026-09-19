@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>321學神院</title>
+<meta name="description" content="321學神院學習 App：角色定位、課程、小組、制度與資料中心">
+<meta name="theme-color" content="#1f2a44">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="321學神院">
+<style>
+:root{--bg:#f6f1e7;--card:#fffdf8;--ink:#1f2a44;--sub:#5d667c;--line:#e4dccb;--gold:#b0822a;--gold2:#f3e6c8;--navy:#1f2a44;--ok:#2f7d4f;--okbg:#e2f1e7;--warn:#a5482d;--warnbg:#f8e5de;--chip:#ece5d5;--shadow:0 1px 3px rgba(31,42,68,.08)}
+@media (prefers-color-scheme:dark){:root{--bg:#141926;--card:#1d2435;--ink:#ece7da;--sub:#a3abbd;--line:#2f3850;--gold:#d9ad55;--gold2:#3a3220;--navy:#0f1420;--ok:#6cc08e;--okbg:#1d3528;--warn:#e58c70;--warnbg:#3d241d;--chip:#2a3247;--shadow:none}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;font-size:16px;line-height:1.65}
+body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+header.top{position:sticky;top:0;z-index:20;background:var(--navy);color:#f4ecd8;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:10px}
+header.top .logo{width:36px;height:36px;border-radius:9px;background:url(data:image/jpeg;base64,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) center/cover;font-size:0;flex:none}
+header.top h1{font-size:17px;margin:0;font-weight:700;flex:1}
+header.top .wk{font-size:12px;background:rgba(255,255,255,.12);padding:3px 9px;border-radius:99px;white-space:nowrap}
+main{max-width:720px;margin:0 auto;padding:14px 16px 24px}
+h2{font-size:19px;margin:18px 0 8px}
+h3{font-size:16px;margin:14px 0 6px}
+p{margin:6px 0}
+.sub{color:var(--sub);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0;box-shadow:var(--shadow)}
+.card.hero{background:var(--navy);color:#f4ecd8;border:none}
+.card.hero .sub{color:#c9c2ad}
+.card.hero .verse{border-left:3px solid #b0822a;color:#e9dfc4}
+.verse{border-left:3px solid var(--gold);padding:4px 0 4px 12px;margin:10px 0;color:var(--sub);font-size:15px}
+.verse b{display:block;font-weight:600;font-size:13px;margin-top:2px}
+.row{display:flex;gap:10px;align-items:center}
+.row.wrap{flex-wrap:wrap}
+.grow{flex:1;min-width:0}
+.chip{display:inline-block;background:var(--chip);color:var(--ink);font-size:12px;padding:2px 9px;border-radius:99px;margin:0 4px 4px 0;white-space:nowrap}
+.chip.gold{background:var(--gold2);color:var(--gold)}
+.chip.ok{background:var(--okbg);color:var(--ok)}
+.chip.warn{background:var(--warnbg);color:var(--warn)}
+button,.btn{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:11px;padding:10px 14px;cursor:pointer;min-height:44px}
+button.pri{background:var(--gold);border-color:var(--gold);color:#fff;font-weight:700}
+button.navy{background:var(--navy);border-color:var(--navy);color:#f4ecd8;font-weight:600}
+button.ghost{background:transparent}
+button.sm{min-height:34px;padding:5px 11px;font-size:14px;border-radius:9px}
+button.full{width:100%;margin-top:8px}
+button:active{opacity:.75}
+input[type=text],input[type=date],input[type=search],input[type=password],textarea,select{font:inherit;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--ink);margin:4px 0 10px}
+textarea{min-height:84px;resize:vertical}
+label{font-size:14px;font-weight:600;color:var(--sub)}
+ul,ol{padding-left:22px;margin:6px 0}
+li{margin:3px 0}
+.todo{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.todo:last-child{border-bottom:none}
+.todo .dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:14px;flex:none;color:transparent}
+.todo.done .dot{background:var(--ok);border-color:var(--ok);color:#fff}
+.todo .t{flex:1;min-width:0}
+.todo .t small{display:block;color:var(--sub);font-size:13px}
+.todo .go{color:var(--sub)}
+.lamps{display:flex;justify-content:space-between;gap:6px;margin-top:8px}
+.lamp{flex:1;text-align:center;font-size:12px;color:var(--sub)}
+.lamp i{display:block;width:34px;height:34px;border-radius:50%;margin:0 auto 4px;background:var(--chip);border:2px solid var(--line)}
+.lamp.on i{background:radial-gradient(circle at 35% 30%,#ffe9a8,#e0a83a);border-color:#e0a83a;box-shadow:0 0 12px rgba(224,168,58,.55)}
+.lamp.on{color:var(--ink);font-weight:600}
+.rel{display:grid;grid-template-columns:72px 1fr;gap:4px 10px;font-size:15px}
+.rel span:nth-child(odd){color:var(--sub);font-size:13px;padding-top:2px}
+.list-item{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.list-item:last-child{border-bottom:none}
+.list-item .n{width:30px;height:30px;border-radius:9px;background:var(--chip);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex:none}
+.list-item.done .n{background:var(--okbg);color:var(--ok)}
+.seg{display:flex;background:var(--chip);border-radius:11px;padding:3px;margin:8px 0}
+.seg button{flex:1;border:none;background:transparent;min-height:36px;padding:4px;font-size:14px;border-radius:9px}
+.seg button.on{background:var(--card);font-weight:700;box-shadow:var(--shadow)}
+.back{display:inline-flex;align-items:center;gap:4px;color:var(--gold);font-weight:600;background:none;border:none;padding:6px 0;min-height:36px}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:8px 0;overflow:hidden}
+details summary{padding:13px 14px;font-weight:700;cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"＋";margin-left:auto;color:var(--gold)}
+details[open] summary::after{content:"－"}
+details .body{padding:0 14px 14px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}
+.tbl th{color:var(--sub);font-size:12px;font-weight:600}
+.scroll{overflow-x:auto}
+.org{display:flex;flex-direction:column;align-items:center;gap:0}
+.org .box{width:100%;max-width:340px;border:1px solid var(--line);border-radius:12px;padding:9px 12px;text-align:center;background:var(--card)}
+.org .box.me{border:2px solid var(--gold);background:var(--gold2)}
+.org .box.king{background:var(--navy);color:#f4ecd8;border:none}
+.org .box small{display:block;color:var(--sub);font-size:12px}
+.org .box.king small{color:#c9c2ad}
+.org .arr{color:var(--gold);font-size:14px;line-height:1.2}
+.org .four{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;width:100%;max-width:340px;margin-top:5px}
+.org .four span{font-size:11px;background:var(--chip);border-radius:8px;padding:4px 2px;text-align:center}
+.code{font-size:34px;letter-spacing:8px;font-weight:800;text-align:center;color:var(--gold);font-variant-numeric:tabular-nums}
+.fruit{display:grid;grid-template-columns:48px 1fr 22px;gap:8px;align-items:center;margin:4px 0;font-size:15px}
+input[type=range]{width:100%;accent-color:var(--gold)}
+.q{margin:12px 0;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+.q:last-of-type{border-bottom:none}
+.opt{display:flex;gap:8px;align-items:flex-start;padding:7px 8px;border-radius:9px;cursor:pointer}
+.opt input{margin-top:6px;accent-color:var(--gold)}
+.opt.right{background:var(--okbg)}
+.opt.wrong{background:var(--warnbg)}
+.exp{font-size:14px;color:var(--sub);margin:4px 0 0 8px}
+.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--navy);color:#fff;padding:9px 16px;border-radius:99px;font-size:14px;z-index:50;box-shadow:0 4px 14px rgba(0,0,0,.25);max-width:88vw;text-align:center}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:30;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs button{flex:1;border:none;background:none;border-radius:0;padding:7px 2px 6px;font-size:11px;color:var(--sub);display:flex;flex-direction:column;align-items:center;gap:1px;min-height:58px}
+nav.tabs button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav.tabs button.on{color:var(--gold);font-weight:700}
+.role-pick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+.role-pick button{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;min-height:76px}
+.role-pick button.on{border:2px solid var(--gold);background:var(--gold2)}
+.role-pick small{color:var(--sub);font-size:12px}
+.scn{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scn button{text-align:left;font-size:14px;min-height:52px}
+.hit{padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.hit b{display:block}
+.hit span{font-size:13px;color:var(--sub)}
+mark{background:var(--gold2);color:inherit;border-radius:3px}
+pre.out{white-space:pre-wrap;word-break:break-all;background:var(--bg);border:1px solid var(--line);border-radius:11px;padding:10px;font-size:13px;max-height:240px;overflow:auto;font-family:inherit}
+.bar{height:8px;background:var(--chip);border-radius:99px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--gold);border-radius:99px}
+.center{text-align:center}
+.mt{margin-top:12px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+'use strict';
+/* ===================== 設定區（資訊組維護） ===================== */
+var CONFIG = {
+  version: '1.0.1',
+  termName: '第一學期',
+  termStart: '2026-10-05',          // 學期第1週的星期一，可在「設定」覆寫
+  weeks: 12,
+  passScore: 70,
+  attendRate: 0.8,
+  // 身分碼雜湊（以「設定 → 身分碼雜湊產生器」產生後貼上；每學期更換）
+  codes: { leader: '3efab731', ta: '210ab38a', head: 'e33e674d' },
+  // 既有學習 App 連結（由資訊組填入網址，留空則不顯示按鈕）
+  links: { theology: '', morning: '', gospel: '', care: '', leadership: '', daily: '', health: '', couples: '' }
+};
+
+var ROLES = {
+  student: { rank: 0, name: '學員', pos: '耶穌的門徒、螞蟻奇兵', ana: '運動員：沒有人能替你上場，學習的主人是你自己。',
+    imit: '我效法耶穌「凡事順服父」的樣式：準時、誠實、受教。',
+    v: '你當竭力在神面前得蒙喜悅，作無愧的工人，按著正意分解真理的道。', vr: '提摩太後書二章15節',
+    up: '向組長與 2 同伴交帳', down: '與 2 同伴彼此陪伴、彼此問責',
+    duty: ['準時出席每週小組聚會並簽到', '完成當週課程、作業、測驗', '每週至少與 2 同伴聯絡一次，互問四句', '在生活中操練 920，誠實填寫生命自省', '守住小組分享的保密', '聚會前送出個人週報給組長'],
+    weekly: '自修預習 → 聚會簽到 → 討論分享 → 交作業 → 做測驗 → 同伴問責 → 送出個人週報' },
+  leader: { rank: 1, name: '組長', pos: '小組的僕人領袖', ana: '家中的長子：不是老師，是主持人，也是第一個學習者。',
+    imit: '我效法耶穌「為門徒洗腳」的樣式：以謙卑帶動謙卑。',
+    v: '誰願為首，就必作你們的僕人。', vr: '馬太福音二十章27節',
+    up: '向助教回報', down: '服事組員、帶領每週聚會',
+    duty: ['定聚會時間並於前一天提醒', '聚會前預習與禱告，帶領每週聚會流程', '在聚會中宣布當週簽到碼', '確認組員簽到、作業、測驗的完成', '安排 2 人同伴配對', '缺席者 24 小時內關懷', '培養副組長，滿 8 人預備繁殖', '聚會後 2 天內送出小組週報給助教'],
+    weekly: '聚會前預習禱告 → 帶聚會 → 收組員週報 → 產生小組週報 → 傳給助教' },
+  ta: { rank: 2, name: '助教', pos: '陪跑的教練、組長的屬靈父母', ana: '橋樑：把負責人的異象帶下去，把小組的實況帶上來。',
+    imit: '我效法耶穌「與門徒同在」的樣式：陪伴多於指導。',
+    v: '務要牧養在你們中間神的群羊，按著神旨意照管他們。', vr: '彼得前書五章2節',
+    up: '向負責人團隊回報', down: '牧養 3 至 5 位組長',
+    duty: ['牧養所轄組長，每月一對一約談', '輪流列席各組聚會', '批閱作業並給予鼓勵性回饋', '解答課程疑難', '追蹤缺席與落後學員的關懷', '發掘並推薦下一代組長', '每週日送出助教週報給負責人團隊'],
+    weekly: '收齊各組週報 → 批閱作業 → 產生助教週報 → 傳給負責人團隊' },
+  head: { rank: 3, name: '負責人', pos: '守望異象的管家', ana: '家中的父母：越在上面，越是在下面托住眾人的僕人。',
+    imit: '我效法耶穌「不憑自己作什麼」的樣式：一同尋求院長主耶穌的心意。',
+    v: '所求於管家的，是要他有忠心。', vr: '哥林多前書四章2節',
+    up: '向院長主耶穌基督交帳', down: '遮蓋並裝備助教',
+    duty: ['守望異象與方向', '制定與修訂規章', '審定課程與學期行事曆', '面試與錄取新生', '選立與培訓助教', '處理重大關懷與紀律事項', '結業審核與差派', '每週為全體學員禱告'],
+    weekly: '閱讀助教週報彙整 → 為全院禱告 → 回應助教的需要；每月：負責人會議、助教月會' }
+};
+var ROLE_ORDER = ['student', 'leader', 'ta', 'head'];
+
+var FRUITS = ['仁愛', '喜樂', '和平', '忍耐', '恩慈', '良善', '信實', '溫柔', '節制'];
+var ACCT_Q = ['這週你與神的關係如何？', '這週「有己」在哪裡醒來？', '上週定的行動落實了嗎？', '我可以怎樣為你禱告？'];
+var GEN_DQ = ['這一課我看見什麼？（我的看見）', '對照這一課，我的問題在哪裡？（我的問題）', '這一週我要怎麼改、怎麼行？（我的行動）'];
+
+var FLOW = [
+  [5, '安靜尋求', '禱告，把主權交給院長主耶穌', '組長'],
+  [10, '簽到與近況', '每人一句話：這週的感恩；輸入簽到碼', '全體'],
+  [30, '一起看聽課程', '組長分享畫面，同步觀看', '組長'],
+  [30, '討論分享', '我看見什麼、我的問題在哪、我要怎麼改', '全體'],
+  [10, '本週行動', '每人定一項具體可行的操練，告訴同伴', '全體'],
+  [5, '代禱與祝福', '兩兩代禱、報告事項', '組長']
+];
+
+var CAL = ['開學與立約：認識彼此、簽署學員約定、配對 2 同伴', '第 1 課', '第 2 課', '第 3 課', '第 4 課', '第 5 課', '第 6 課', '第 7 課', '第 8 課', '第 9 課', '第 10 課', '回顧、見證與感恩：把榮耀歸給神'];
+
+/* ===================== 課程 ===================== */
+var CATS = { bible: '321聖經講義', theo: '321學神神學', idea: '321理念', life: '生活操練', skill: '服事技能' };
+var MODES = { req: '必修', elec: '選修', self: '自修' };
+function Q(q, o, a, e) { return { q: q, o: o, a: a, e: e }; }
+var TF = ['是', '非'];
+
+var COURSES = [
+{ id: 'idea1', cat: 'idea', mode: 'req', credit: 2, title: '321理念入門', desc: '三個基礎、兩個核心、一個目的，從有己到無己，活出基督的生命。', lessons: [
+  { t: '三個基礎：榜樣、準則、引導', v: '我給你們作了榜樣，叫你們照著我向你們所做的去做。', vr: '約翰福音十三章15節',
+    ana: '三個基礎像一張三腳凳：少了任何一隻腳，生命都坐不穩。',
+    pts: ['耶穌是我的榜樣：不以人為榜樣，人會叫我們失望，耶穌永不改變。', '聖經是我的準則：不以感覺、傳統或多數人的意見為準，凡事回到聖經。', '聖靈是我的引導：聖靈住在心中，不是住在腦中；用心靠聖靈，不用腦靠自己。', '三者的次序就是服事之路的前三步：靈、悟、命。'],
+    quiz: [
+      Q('下列哪一項不是321理念的三個基礎？', ['耶穌是我的榜樣', '聖經是我的準則', '聖靈是我的引導', '經驗是我的依靠'], 3, '三個基礎是榜樣、準則、引導，都指向三一神，而不是自己的經驗。'),
+      Q('「用心就開心，用腦就＿＿」', ['放心', '煩惱', '聰明', '成功'], 1, '用心靠聖靈就開心，用腦靠自己就煩惱。'),
+      Q('與人意見不同時，應以多數人的看法為最後準則。', TF, 1, '聖經是我的準則，不是多數人的意見。'),
+      Q('聖靈住在信徒的哪裡？', ['腦中', '心中', '教堂裡', '天上'], 1, '一生的果效從心發出，聖靈住在心中。'),
+      Q('約翰福音十三章15節，耶穌說：「我給你們作了＿＿」', ['老師', '榜樣', '見證', '朋友'], 1, '「我給你們作了榜樣，叫你們照著我向你們所做的去做。」')
+    ] },
+  { t: '兩個核心：讓耶穌作王、得一切榮耀', v: '所以，你們或吃或喝，無論做什麼，都要為榮耀神而行。', vr: '哥林多前書十章31節',
+    ana: '心像一張寶座，只能坐一位王：我下來，耶穌才能上去。',
+    pts: ['讓耶穌作王：不是我作主，乃是讓耶穌在我裡面活、在我裡面掌權。', '讓耶穌得著一切的榮耀：一切都是神在耶穌裡所作成的，都是恩典。', '凡事謝恩，把榮耀歸給耶穌，就不會驕傲，也不會自卑。', '焦點在耶穌，不在自己、不在別人、不在環境。'],
+    quiz: [
+      Q('321理念的兩個核心是？', ['讀經與禱告', '讓耶穌作王、讓耶穌得著一切的榮耀', '信心與行為', '敬拜與服事'], 1, '兩個核心：讓耶穌作王；讓耶穌得著一切的榮耀。'),
+      Q('服事有果效時，最合宜的回應是？', ['肯定自己的努力', '與別人比較成果', '凡事謝恩，把榮耀歸給耶穌', '要求更高的職位'], 2, '一切都是神的恩典，榮耀歸給耶穌。'),
+      Q('我們的焦點應該放在哪裡？', ['自己', '別人', '環境', '耶穌'], 3, '耶穌是一切的焦點。'),
+      Q('讓耶穌作王，意思是我仍然作主，只是請耶穌幫忙。', TF, 1, '讓耶穌作王是我從寶座下來，由祂掌權。'),
+      Q('哥林多前書十章31節：無論做什麼，都要為＿＿而行。', ['榮耀神', '得賞賜', '建立教會', '造就自己'], 0, '「都要為榮耀神而行。」')
+    ] },
+  { t: '一個目的：建立屬神的體系', v: '願人都尊你的名為聖。願你的國降臨；願你的旨意行在地上，如同行在天上。', vr: '馬太福音六章9至10節',
+    ana: '螞蟻雖小，體系卻大：每一隻都各就各位，整個蟻群就無往不利。',
+    pts: ['一個目的：建立屬神的體系，在地上建立屬神的領域。', '屬神的體系成就主禱文：神的名被尊為聖、神的國降臨、神的旨意成就。', '路徑：操練 920 → 發展 235 → 建立螞蟻家教會 → 建立神國。', '國度、權柄、榮耀全是神的，我們只是回到本位。'],
+    quiz: [
+      Q('321理念的一個目的是？', ['教會增長', '建立屬神的體系', '個人成功', '學問淵博'], 1, '一個目的：建立屬神的體系。'),
+      Q('建立屬神的體系，就是成就哪一段禱文？', ['主禱文', '雅比斯的禱告', '大祭司的禱告', '飯前禱告'], 0, '尊主名為聖、神國降臨、神旨意成就。'),
+      Q('下列哪一個是正確的發展路徑？', ['235 → 920 → 神國', '920 → 235 → 螞蟻家教會 → 神國', '神國 → 920', '家教會 → 920 → 235'], 1, '先活出無己的生命（920），再發展同伴團隊（235）。'),
+      Q('建立屬神體系的關鍵在於更好的管理技巧。', TF, 1, '關鍵在無己：無己才能建立屬神體系。'),
+      Q('主禱文說：願你的旨意行在地上，如同行在＿＿。', ['教會', '天上', '心裡', '聖殿'], 1, '「如同行在天上。」')
+    ] },
+  { t: '有己與無己', v: '我已經與基督同釘十字架，現在活著的不再是我，乃是基督在我裡面活著。', vr: '加拉太書二章20節',
+    ana: '杯子若裝滿了自己，就倒不進活水；倒空了，才能被充滿。',
+    pts: ['有己：以自己為中心，自己要作主作王、要代替神，是人類墮落的根源。', '無己：不再是我，乃是基督；不是沒有，乃是進入無限、活出無限。', '神藉著耶穌的死解決我們的罪性和罪行，藉著耶穌的復活賜給我們新生命。', '無己才能讓耶穌作王、被聖靈引導、與人合一、成為得勝者。'],
+    quiz: [
+      Q('「有己」指的是什麼？', ['有自信', '以自己為中心、要代替神作主', '有個性', '有恩賜'], 1, '有己是以自己為中心，要作主作王代替神。'),
+      Q('「無己」的意思是變得一無所有、毫無價值。', TF, 1, '無己不是沒有，乃是進入無限、活出無限。'),
+      Q('我們靠什麼才能無己？', ['意志力', '福音真理', '嚴格的紀律', '別人的監督'], 1, '藉著福音真理，我們才能無己。'),
+      Q('加拉太書二章20節：現在活著的不再是我，乃是＿＿在我裡面活著。', ['聖經', '基督', '信心', '教會'], 1, '「乃是基督在我裡面活著。」'),
+      Q('下列哪一項是無己帶來的結果？', ['合一', '紛爭', '比較', '自卑'], 0, '無己才能合一，無己才能得勝。')
+    ] },
+  { t: '驕傲與謙卑', v: '神阻擋驕傲的人，賜恩給謙卑的人。', vr: '雅各書四章6節',
+    ana: '驕傲對驕傲像兩塊石頭相碰，火花四濺、兩敗俱傷；謙卑像水，遇石則繞，終能穿石。',
+    pts: ['驕傲是離開本位、抓住權力：離開人的本位，抓住神的權力，想要代替神。', '謙卑是放下權力、回到本位：讓人作人，讓神作神。', '驕傲激起驕傲，兩敗俱傷；謙卑帶動謙卑，達到雙贏。', '謙卑是復興的鑰匙：謙卑戰勝驕傲，無己戰勝撒但。'],
+    quiz: [
+      Q('321理念對「驕傲」的定義是？', ['穿著華麗', '離開本位、抓住權力', '說話大聲', '很有才幹'], 1, '驕傲是離開人的本位，抓住神的權力。'),
+      Q('謙卑的定義是？', ['看不起自己', '放下權力、回到本位', '不敢表達意見', '凡事退讓'], 1, '謙卑是回到人的本位，放下神的權力。'),
+      Q('對方驕傲時，用更強的氣勢壓過去是最好的辦法。', TF, 1, '驕傲對抗驕傲，兩敗俱傷；謙卑帶動謙卑。'),
+      Q('雅各書四章6節：神阻擋驕傲的人，賜恩給＿＿的人。', ['聰明', '謙卑', '勤勞', '富足'], 1, '「賜恩給謙卑的人。」'),
+      Q('復興的鑰匙是什麼？', ['策略', '謙卑', '人數', '資源'], 1, '謙卑是復興的鑰匙。')
+    ] },
+  { t: '改變觀念的八大步驟', v: '不要效法這個世界，只要心意更新而變化，叫你們察驗何為神的善良、純全、可喜悅的旨意。', vr: '羅馬書十二章2節',
+    ana: '觀念像眼鏡：鏡片換了，看見的世界就全變了。',
+    pts: ['改變觀念就改變生命，改變生命就改變生活；改變從我開始。', '八大步驟：資訊、啟示、信服、實踐、檢討、修正、反覆、繁殖。', '改變觀點就能改變觀念：從人到神、從地到天、從暫時到永恆、從屬世到屬神。', '由內而外五重改變：觀念、生命、生活、關係、事工。'],
+    quiz: [
+      Q('八大步驟的第一步與最後一步是？', ['啟示、修正', '資訊、繁殖', '信服、反覆', '實踐、檢討'], 1, '資訊、啟示、信服、實踐、檢討、修正、反覆、繁殖。'),
+      Q('「信服」之後的下一步是？', ['檢討', '實踐', '繁殖', '啟示'], 1, '信服之後要實踐。'),
+      Q('改變應該從誰開始？', ['配偶', '領袖', '我', '環境'], 2, '改變從我開始。'),
+      Q('由內而外五重改變的正確次序是？', ['事工、關係、生活、生命、觀念', '觀念、生命、生活、關係、事工', '生活、觀念、事工、關係、生命', '關係、事工、觀念、生活、生命'], 1, '觀念、生命、生活、關係、事工。'),
+      Q('只要聽過資訊，觀念就已經改變了。', TF, 1, '資訊只是第一步，還要啟示、信服、實踐直到繁殖。')
+    ] },
+  { t: '先生命、再關係、後事工', v: '你要保守你心，勝過保守一切，因為一生的果效是由心發出。', vr: '箴言四章23節',
+    ana: '樹先有根，再有幹，後有果；只顧摘果而不顧根的樹，很快就枯乾。',
+    pts: ['生命、關係、事工：先有生命，再有關係，後有事工。', '人比事重要，關係比東西重要；不要為了事而傷害人，不要為了東西破壞關係。', '關係的次序：先與神，再與自己，再與人，最後與事。', '一生的果效從心發出，所以先顧心、先顧生命。'],
+    quiz: [
+      Q('正確的次序是？', ['事工、關係、生命', '生命、關係、事工', '關係、事工、生命', '事工、生命、關係'], 1, '先生命、再關係、後事工。'),
+      Q('關係的次序，第一個要建立的是？', ['與人的關係', '與事的關係', '與神的關係', '與自己的關係'], 2, '先與神，再與自己，再與人，再與事。'),
+      Q('為了把事情做好，偶爾傷害同工是可以接受的。', TF, 1, '人比事重要，不要為了事而傷害人。'),
+      Q('箴言四章23節：一生的果效是由＿＿發出。', ['口', '心', '手', '腦'], 1, '「一生的果效是由心發出。」'),
+      Q('「關係比＿＿重要」', ['東西', '生命', '神', '真理'], 0, '關係比東西重要。')
+    ] },
+  { t: '操練 920：活出聖靈的果子', v: '聖靈所結的果子，就是仁愛、喜樂、和平、忍耐、恩慈、良善、信實、溫柔、節制。', vr: '加拉太書五章22至23節',
+    ana: '每一個「2」都是神派來的磨刀石，把我磨成像基督的樣式。',
+    pts: ['9：聖靈的九種果子，就是基督的生命。', '2：每一個跟我有關係的人，都是我的 2。', '0：操練活出無己的生命。', '在每個 2 面前操練 0，就結出 9。問題不在對方，而在我的「有己」。'],
+    quiz: [
+      Q('920 的「2」指的是？', ['兩位同工', '每個跟我有關係的人', '兩次聚會', '兩種恩賜'], 1, '每個跟我們有關係的人是我們的 2。'),
+      Q('920 的「0」指的是？', ['零缺點', '無己的生命', '零花費', '從零開始'], 1, '0 是無己。'),
+      Q('聖靈的果子共有幾種？', ['七種', '九種', '十種', '十二種'], 1, '仁愛、喜樂、和平、忍耐、恩慈、良善、信實、溫柔、節制。'),
+      Q('與人相處出問題時，920 教我們先看對方的問題。', TF, 1, '先看見自己的有己，改變從我開始。'),
+      Q('下列哪一個不在聖靈九果之中？', ['溫柔', '節制', '聰明', '信實'], 2, '九果中沒有「聰明」。')
+    ] },
+  { t: '發展 235：同伴、家、團隊', v: '有人攻勝孤身一人，若有二人便能敵擋他；三股合成的繩子不容易折斷。', vr: '傳道書四章12節',
+    ana: '一根筷子易折，一把筷子難斷。',
+    pts: ['2：與無己的人成為屬靈同伴，彼此陪伴、彼此問責。', '3：建立屬靈父母與兒女的關係，生命傳承。', '5：成為屬靈戰友，五重職份的團隊（使徒、先知、傳福音的、牧師、教師）。', '235 要建立在 920 之上：沒有無己，團隊就變成戰場。'],
+    quiz: [
+      Q('235 的「3」指的是？', ['三人小組', '屬靈父母兒女的關係', '三次聚會', '三個基礎'], 1, '3 是屬靈父母兒女的關係。'),
+      Q('235 的「5」指的是？', ['五個人', '五重職份的團隊', '五餅', '五個步驟'], 1, '5 是屬靈戰友、五重職份的團隊。'),
+      Q('下列哪一個不屬於五重職份？', ['使徒', '先知', '執事', '教師'], 2, '五重職份：使徒、先知、傳福音的、牧師、教師。'),
+      Q('235 應該建立在什麼基礎上？', ['共同興趣', '920 無己的生命', '相同背景', '組織章程'], 1, '無己才能合一。'),
+      Q('傳道書四章12節：＿＿合成的繩子不容易折斷。', ['兩股', '三股', '五股', '七股'], 1, '「三股合成的繩子不容易折斷。」')
+    ] },
+  { t: '服事之路與得勝者', v: '得勝的，我要賜他在我寶座上與我同坐，就如我得了勝，在我父的寶座上與他同坐一般。', vr: '啟示錄三章21節',
+    ana: '服事像導電：電線自己不發光，只要接上電源、保持暢通，燈就亮了。',
+    pts: ['靈：聖靈是我的引導，尋求聖靈的引導及感動。', '悟：聖經是我的準則，領悟並遵行聖經的真理。', '命：耶穌是我的榜樣，培養並活出耶穌的生命。', '侍：讓耶穌作王，靠耶穌的權柄能力服事。', '神：讓耶穌得到一切的榮耀，凡事謝恩。', '得勝者：舊人有己的生命變成新人無己的生命，反敗為勝，將來與基督同坐寶座。'],
+    quiz: [
+      Q('服事之路五個字的正確次序是？', ['悟靈命侍神', '靈悟命侍神', '命靈悟神侍', '侍神靈悟命'], 1, '靈、悟、命、侍、神。'),
+      Q('「侍」對應321理念的哪一項？', ['聖經是我的準則', '讓耶穌作王', '聖靈是我的引導', '耶穌是我的榜樣'], 1, '侍：讓耶穌在我裡面作王掌權，靠祂服事。'),
+      Q('服事的第一步是先擬定周全的計畫。', TF, 1, '第一步是「靈」：尋求聖靈的引導。'),
+      Q('啟示錄三章21節應許得勝的要怎樣？', ['得著冠冕', '在寶座上與主同坐', '得著白石', '吃生命樹的果子'], 1, '「我要賜他在我寶座上與我同坐。」'),
+      Q('我們靠什麼成為得勝者？', ['無己，讓基督在我裡面活', '比別人更努力', '累積資歷', '避開爭戰'], 0, '無己才能得勝。')
+    ] }
+] },
+{ id: 'mark', cat: 'bible', mode: 'req', credit: 2, title: '321聖經講義：馬可福音', desc: '跟隨僕人君王耶穌的腳蹤，看祂如何活出無己的生命。', link: '', lessons:
+  ['第1章　福音的起頭', '第2–3章　新酒與新皮袋', '第4章　撒種的比喻', '第5章　權柄勝過一切', '第6章　五餅二魚', '第7–8章　你們說我是誰', '第9–10章　為首的作眾人的用人', '第11–12章　君王進耶路撒冷', '第13章　警醒等候', '第14–16章　十字架與復活'].map(function (t) { return { t: t }; }) },
+{ id: 'theo1', cat: 'theo', mode: 'elec', credit: 1, title: '神學導論與聖經論', desc: '學神神學：不是研究神，而是認識神、學像神。', link: 'theology', lessons:
+  ['什麼是學神神學', '神的啟示', '聖經的默示', '聖經的權威與無誤', '聖經的正典', '解經的基本原則'].map(function (t) { return { t: t }; }) },
+{ id: 'lead235', cat: 'skill', mode: 'elec', credit: 1, title: '帶領 235 小組（組長必讀）', desc: '少講多問，讓每個人都開口；用心靠聖靈帶領。', lessons:
+  ['組長的定位：僕人領袖', '聚會六段流程', '提問與聆聽', '關懷缺席者', '培養副組長與繁殖'].map(function (t) { return { t: t }; }) },
+{ id: 'gospel', cat: 'skill', mode: 'elec', credit: 1, title: '福音同行', desc: '從為我的 2 禱告開始，陪伴一個人認識耶穌。', link: 'gospel', lessons:
+  ['為誰禱告：我的 2', '建立關係', '分享見證', '傳講福音', '陪伴初信'].map(function (t) { return { t: t }; }) },
+{ id: 'care', cat: 'skill', mode: 'elec', credit: 1, title: '愛的關懷', desc: '人比事重要：學習聆聽、探訪與代禱。', link: 'care', lessons:
+  ['關懷的心：先生命後事工', '聆聽的功課', '探訪與代禱', '陪伴走過低谷'].map(function (t) { return { t: t }; }) },
+{ id: 'morning', cat: 'life', mode: 'self', credit: 0.5, title: '晨讀與禱告', desc: '關係的次序，先與神：每天把第一段時間給神。', link: 'morning', lessons:
+  ['為什麼要晨讀', '安靜的操練', '讀經的方法', '禱告的生活', '持之以恆'].map(function (t) { return { t: t }; }) },
+{ id: 'health', cat: 'life', mode: 'self', credit: 0.5, title: '健康新生活', desc: '身體是聖靈的殿：八項健康原則的操練。', link: 'health', lessons:
+  ['營養', '運動', '水', '陽光', '節制', '空氣', '休息', '信靠神'].map(function (t) { return { t: t }; }) },
+{ id: 'daily', cat: 'life', mode: 'self', credit: 0.5, title: '每日得勝：時間的管家', desc: '先求神的國：把每天交給主安排。', link: 'daily', lessons:
+  ['時間是神的', '先後次序', '一天的計畫與回顧', '安息的操練'].map(function (t) { return { t: t }; }) }
+];
+
+/* ===================== 學神院制度 ===================== */
+var INFO = [
+{ id: 'vision', t: '異象與使命', h: '<p>321學神院不是「學神學」的學校，而是「學神」的家：學習神、像神、活出神的形像和樣式。<b>院長是主耶穌基督</b>，真理的聖靈是親自授課的老師，所有同工都只是助教。</p><div class="verse">你們要先求他的國和他的義，這些東西都要加給你們了。<b>馬太福音六章33節</b></div><p><b>異象</b>：活出基督，成為得勝者，發展螞蟻戰略，建立神國。</p><p><b>使命</b>：培訓國度家人成為螞蟻奇兵，被聖靈充滿，活出基督無己的生命，建立螞蟻家教會，邁進末後的大復興，迎接主耶穌再來。</p><p><b>五大學習課程</b>：321聖經講義、321學神神學、321理念、生活操練、服事技能。</p><p><b>三條原則</b></p><ul><li>先生命、再關係、後事工：評量先看生命，再看關係，最後才看課業。</li><li>人比事重要，關係比東西重要：缺席先關懷、後補課。</li><li>改變從我開始：每一項評量都是自我評量，焦點在耶穌。</li></ul>' },
+{ id: 'org', t: '組織架構與屬靈次序', h: '<p>學神院的架構是「倒金字塔」：越在上面的人，越是在下面托住眾人的僕人。次序不是階級，而是本位。</p><div class="verse">你們中間誰願為大，就必作你們的用人；誰願為首，就必作你們的僕人。<b>馬太福音二十章26至27節</b></div>__ORG__<p class="sub">由上而下是「遮蓋、供應、服事」；由下而上是「回報、問責、代禱」。</p><h3>235 互助學習小組</h3><div class="scroll"><table class="tbl"><tr><th>單位</th><th>關係</th><th>功用</th></tr><tr><td>2 屬靈同伴</td><td>彼此陪伴、彼此問責</td><td>每週互相確認作業與生活操練</td></tr><tr><td>3 屬靈家庭</td><td>屬靈父母與兒女</td><td>老學員帶新學員，生命傳承</td></tr><tr><td>5 屬靈戰友</td><td>五重職份團隊</td><td>一起上課、討論、服事、繁殖新小組</td></tr></table></div><ul><li>一個小組以 5 人為標準（3 至 7 人皆可），滿 8 人即預備繁殖為兩組。</li><li>一位助教照管 3 至 5 組；一位負責人同工照管 3 至 5 位助教。</li><li>跨國跨時區編組，以「可共同上線的時段」為第一考量。</li></ul><p><b>關係的次序</b>：先與神，再與自己，再與人，最後與事。</p>' },
+{ id: 'roles', t: '四種角色的定位與職責', h: '__ROLES__' },
+{ id: 'rules', t: '規章制度（八章）', h: '<div class="verse">凡事都要規規矩矩地按著次序行。<b>哥林多前書十四章40節</b></div><p class="sub">規章像葡萄架，不是為了捆綁枝子，而是托住枝子往上長、結果子。</p><h3>第一章　入學</h3><ol><li>資格：重生得救、認同321理念、願意被陪伴也願意陪伴人。</li><li>流程：報名表 → 推薦人確認 → 面試 → 錄取通知 → 簽署學員約定 → 領取 App 與編組。</li><li>面試看三件事：生命（得救見證）、心志（為何而學）、時間（能否穩定投入）。</li></ol><h3>第二章　學籍</h3><ol><li>狀態分五種：預備生、正式學員、休學、結業、退學。</li><li>新生前 4 週為預備期，出席達 3 次以上轉為正式學員。</li><li>因故可申請休學一個學期，復學時重新編組。</li></ol><h3>第三章　出席與請假</h3><ol><li>每週小組聚會為必要出席；出席率達 80% 方得該學期學分。</li><li>請假須於聚會前告知組長，並於 7 天內看完課程、與同伴補討論，即視為「補課出席」。</li><li>連續 2 週無故缺席，組長關懷並回報助教；連續 4 週，由助教約談，商議休學或調組。先關心人，再處理事。</li></ol><h3>第四章　作業與測驗</h3><ol><li>作業於下次聚會前繳交；遲交可補，但須在學期結束前完成。</li><li>測驗為自我評量，可重複作答，取最高分；70 分為通過。</li><li>作業重在「真實」不在「漂亮」：寫自己的看見、自己的問題、自己的改變。</li></ol><h3>第五章　陪伴與問責</h3><ol><li>每位學員必有一位 2 同伴，每週至少聯絡一次，互問四句。</li><li>問責的態度是謙卑對謙卑：只問自己的問題，不指責對方的問題。</li></ol><h3>第六章　團契生活公約</h3><ol><li>保密：小組中的個人分享不外傳。</li><li>不論斷、不教導、不爭辯：分享時用「我」開頭，不用「你應該」。</li><li>不在小組中推銷、借貸、拉政治立場；不傳與純正福音信仰相違的教導。</li></ol><h3>第七章　勸戒與挑戰處理</h3><p>按馬太福音十八章15至17節的次序：當事人私下溝通 → 組長協助 → 助教介入 → 負責人團隊裁定。每一步的目的都是挽回，不是懲罰。</p><h3>第八章　結業與差派</h3><ol><li>結業條件：修滿必修與選修學分、出席達標、完成結業見證、經組長與助教推薦。</li><li>建議門檻：兩年六學期，必修 24、選修 4、自修 2，合計 30 學分。</li><li>結業不是終點，是差派：成為組長、建立新的 235、開拓螞蟻家教會。</li><li>成長階梯：學員 → 副組長 → 組長 → 助教 → 負責人同工。</li></ol>' },
+{ id: 'modes', t: '必修、選修、自修', h: '<div class="scroll"><table class="tbl"><tr><th>方式</th><th>怎麼上</th><th>評量</th><th>學分</th></tr><tr><td><b>必修</b></td><td>235 小組每週一起看課、討論、分享</td><td>簽到＋作業＋測驗＋同伴問責</td><td>每門 2</td></tr><tr><td><b>選修</b></td><td>依恩賜與負擔自選，另組學習圈或在原小組加選</td><td>作業＋測驗</td><td>每門 1</td></tr><tr><td><b>自修</b></td><td>個人在 App 內依自己步調學習</td><td>測驗＋一句話心得</td><td>每門 0.5</td></tr></table></div><p>每學期必修 2 門（一門「知」：聖經或神學；一門「行」：理念、操練或技能），選修至多 1 門，自修不限。</p><p><b>每一課的固定結構</b>對應改變觀念八步驟：資訊（看課）→ 啟示（安靜尋求）→ 信服（討論分享）→ 實踐（本週行動）→ 檢討（同伴問責）→ 修正 → 反覆 → 繁殖（教給另一個人）。</p>' },
+{ id: 'flow', t: '每週聚會流程（約 90 分鐘）', h: '<div class="verse">只是你們要行道，不要單單聽道，自己欺哄自己。<b>雅各書一章22節</b></div>__FLOW__<p><b>一週節奏</b>：聚會前自修預習 → 聚會日簽到、看課、討論 → 聚會後 2 天內交作業、做測驗 → 週間操練 920、同伴問責一次 → 下次聚會前送出個人週報。</p><p class="sub">組長小提醒：用心靠聖靈，不用腦靠自己；少講多問，讓每個人都開口；沉默不可怕，那可能是聖靈正在工作。</p>' },
+{ id: 'assess', t: '自我評量與五盞燈', h: '<div class="verse">你們總要自己省察有信心沒有，也要自己試驗。<b>哥林多後書十三章5節</b></div><p>評量是一面鏡子，不是一把尺。全部評量只給本人與陪伴者看，不公開、不排名，只與「昨天的自己」比。</p><div class="scroll"><table class="tbl"><tr><th>燈</th><th>面向</th><th>怎麼做</th><th>亮燈標準</th></tr><tr><td>920 自省</td><td>生命</td><td>九果各 1 至 5 分自評＋本週「有己」醒來的時刻</td><td>八成週次有填</td></tr><tr><td>同伴問責</td><td>關係</td><td>與 2 同伴互問四句</td><td>八成週次完成</td></tr><tr><td>簽到</td><td>事工</td><td>聚會中輸入當週簽到碼；補課者輸入補課碼</td><td>出席率 80%</td></tr><tr><td>作業</td><td>事工</td><td>三段式：我的看見、我的問題、我的行動</td><td>必修作業完成八成</td></tr><tr><td>測驗</td><td>事工</td><td>每課測驗，答後顯示解析，可重測</td><td>必修測驗通過八成</td></tr></table></div><p>五盞全亮即得該學期學分；未亮的燈就是下學期的成長方向。</p>' },
+{ id: 'report', t: '互動與回報機制', h: '<p>回報像身體的血液循環：週報由下往上送，關懷與供應由上往下流。有回報必有回應，這是對人的尊重。</p><div class="scroll"><table class="tbl"><tr><th>週報</th><th>誰產生</th><th>傳給誰</th><th>何時</th></tr><tr><td>個人週報</td><td>學員</td><td>組長</td><td>聚會前</td></tr><tr><td>小組週報</td><td>組長</td><td>助教</td><td>聚會後 2 天內</td></tr><tr><td>助教週報</td><td>助教</td><td>負責人團隊</td><td>每週日</td></tr></table></div><p>App 會一鍵產生「給人讀的文字」加「一行代碼」。上一級把整段貼進 App，就自動彙整成表。920 分數、有己時刻與作業全文屬個人隱私，不會進入週報。</p><h3>會議與陪伴節奏</h3><ul><li>每週：小組聚會、2 人同伴問責</li><li>每月：助教與組長一對一、助教月會、負責人會議</li><li>每學期：開學立約、期末感恩見證會、同工退修</li><li>每年：結業與差派禮、規章與課程檢討</li></ul>' },
+{ id: 'help', t: '遇到問題找誰（求助次序）', h: '<div class="scroll"><table class="tbl"><tr><th>問題</th><th>第一步</th><th>第二步</th><th>第三步</th></tr><tr><td>課程內容不懂</td><td>同伴與小組討論</td><td>組長</td><td>助教 → 教務組</td></tr><tr><td>App 操作</td><td>資料中心常見問題</td><td>組長</td><td>資訊組</td></tr><tr><td>請假補課</td><td>組長</td><td>助教</td><td>學務組</td></tr><tr><td>個人與家庭困難</td><td>同伴代禱</td><td>組長</td><td>助教 → 關懷組</td></tr><tr><td>人際衝突</td><td>當事人私下溝通</td><td>組長</td><td>助教 → 負責人團隊</td></tr></table></div><p>原則：逐級而上、不越級、不繞道；唯有緊急危難（人身安全、重大變故）可直接聯絡關懷組。</p><p><b>負責人團隊四組分工</b>：教務組（課程、作業、測驗）、學務組（招生、面試、學籍、編組）、關懷組（牧養、禱告、危機關懷）、資訊組（App、資料中心、身分碼）。</p>' },
+{ id: 'cal', t: '學期行事曆', h: '__CAL__' }
+];
+
+var GLOSSARY = [
+  ['三個基礎', '耶穌是我的榜樣；聖經是我的準則；聖靈是我的引導。'],
+  ['兩個核心', '讓耶穌作王；讓耶穌得著一切的榮耀。'],
+  ['一個目的', '建立屬神的體系。'],
+  ['有己', '舊人以自己為中心，自己要作主作王、要代替神的生命；人類墮落的根源。'],
+  ['無己', '不再是我，乃是基督在我裡面活；不是沒有，乃是進入無限、活出無限。'],
+  ['驕傲', '離開人的本位，抓住神的權力，想要代替神。'],
+  ['謙卑', '放下權力、回到本位；讓人作人，讓神作神。謙卑是復興的鑰匙。'],
+  ['920', '每個跟我有關係的人是我的 2，操練活出無己 0 的生命，結出 9 聖靈的果子。'],
+  ['235', '2 屬靈同伴、3 屬靈父母兒女、5 屬靈戰友五重職份的團隊。'],
+  ['改變觀念八大步驟', '資訊、啟示、信服、實踐、檢討、修正、反覆、繁殖。'],
+  ['五重改變', '由內而外：觀念、生命、生活、關係、事工。'],
+  ['四種觀點的改變', '從人到神、從地上到天上、從暫時到永恆、從屬世到屬神。'],
+  ['關係的次序', '先與神，再與自己，再與人，再與事。'],
+  ['服事之路', '靈（聖靈引導）、悟（聖經真理）、命（耶穌生命）、侍（讓耶穌作王）、神（榮耀歸神）。'],
+  ['螞蟻戰略', '像螞蟻一樣微小卻各就各位、彼此連結，以家教會為單位建立屬神的體系。'],
+  ['得勝者', '舊人有己的生命變成新人無己的生命，反敗為勝，將來在神國與基督同坐寶座。'],
+  ['用心與用腦', '用心靠聖靈，不要用腦靠自己；用心就開心，用腦就煩惱。']
+];
+
+var FAQ = [
+  ['換手機了，紀錄怎麼帶過去？', '到「資料中心 → 設定與備份」按「匯出備份」，把整段文字傳給自己；在新手機開啟 App 後，到同一個地方貼上並按「匯入備份」。'],
+  ['簽到碼輸入後顯示不正確？', '請確認三件事：小組代碼與組長的一致（不分大小寫）、學期開始日一致、現在的週次正確。三者都在「設定」可查看。'],
+  ['這週請假了，怎麼補課？', '聚會前告知組長；7 天內看完課程並與同伴補討論，向組長或同伴索取「補課碼」，在簽到頁輸入即記為補課出席。'],
+  ['測驗沒過怎麼辦？', '測驗是鏡子不是門檻，看完解析可以立刻重測，系統只記最高分。'],
+  ['920 的分數會被別人看到嗎？', '不會。920 自評、有己時刻、作業全文都只存在你的手機，不會進入週報。'],
+  ['怎麼把週報傳給組長？', '到「小組 → 個人週報」按「產生並分享」，用 LINE 或 WhatsApp 傳給組長即可；請保留最後一行代碼，組長的 App 靠它自動彙整。'],
+  ['我想換小組或調整同伴', '先與組長談；組長與助教商議後，由學務組調整。調整後到「設定」修改小組代碼與同伴姓名。'],
+  ['如何把 App 加到手機桌面？', 'iPhone：用 Safari 開啟 → 分享 → 加入主畫面。Android：用 Chrome 開啟 → 選單 → 安裝應用程式。安裝後離線也能使用。'],
+  ['身分碼忘記了？', '組長請問助教，助教請問負責人團隊資訊組。身分碼每學期更換一次。']
+];
+
+var HANDBOOKS = [
+  { role: 'student', t: '學員手冊', h: '<p><b>新生七日引導</b></p><ol><li>第 1 天：安裝 App，填好姓名、小組代碼。</li><li>第 2 天：讀「異象與使命」和「四種角色」。</li><li>第 3 天：讀「規章制度」，預備簽署學員約定。</li><li>第 4 天：認識你的 2 同伴，約好每週聯絡的時間。</li><li>第 5 天：預習第 1 課，試做測驗。</li><li>第 6 天：做第一次 920 生命自省。</li><li>第 7 天：參加第一次聚會，輸入簽到碼。</li></ol><p><b>每週五件事</b>：920 自省、同伴問責、聚會簽到、交作業、做測驗。</p><p><b>學員約定</b>：我願意以耶穌為榜樣、以聖經為準則、以聖靈為引導；準時出席、誠實自省、守密彼此、改變從我開始。</p>' },
+  { role: 'leader', t: '組長帶領手冊', h: '<p><b>聚會前</b></p><ul><li>前一天提醒聚會時間與連結。</li><li>自己先看完課、先做作業：第一個學習者。</li><li>為每位組員提名禱告。</li></ul><p><b>聚會中</b></p><ul><li>照六段流程走，守時是對人的尊重。</li><li>在「簽到與近況」時宣布本週簽到碼。</li><li>少講多問；有人講太久，溫柔地說：「謝謝你，我們也聽聽別人的。」</li><li>不回答所有問題；不會的就說「我去請教助教」。</li></ul><p><b>聚會後</b></p><ul><li>缺席者 24 小時內關懷：先問人好不好，再談補課。</li><li>收組員週報，貼進 App 彙整，2 天內送出小組週報。</li><li>每月與助教一對一，誠實談自己的光景。</li></ul><p><b>繁殖</b>：從第一天就留意誰可以成為副組長；滿 8 人預備分成兩組。</p>' },
+  { role: 'ta', t: '助教手冊', h: '<p><b>每週</b></p><ul><li>收齊各組小組週報，貼進 App 彙整。</li><li>留意「需關懷」名單，與組長確認已有人跟進。</li><li>批閱作業：先肯定真實，再點出一個亮光，最後一句鼓勵；不改文筆、不比較。</li><li>週日送出助教週報。</li></ul><p><b>每月</b></p><ul><li>與每位組長一對一約談（可用「約談記錄」）：先問生命，再問關係，後問事工。</li><li>輪流列席各組，只觀察與代禱，不搶帶領。</li></ul><p><b>作業回饋範本</b>：「謝謝你真實的分享。你看見＿＿，這是聖靈的光照。為你的行動＿＿禱告，下週聽你的見證。」</p>' },
+  { role: 'head', t: '負責人手冊', h: '<p><b>面試流程</b>：兩人一組面試，約 30 分鐘。三問：你怎麼認識耶穌？你為什麼想來學神院？你每週能穩定投入哪些時段？面試後一同禱告，有平安才錄取。</p><p><b>每月負責人會議議程</b>：敬拜禱告 → 各組（教務、學務、關懷、資訊）報告 → 需裁定事項 → 為助教與學員提名禱告。</p><p><b>選立同工</b>：由上一級推薦，負責人團隊禱告後設立；看生命過於看能力。</p><p><b>每學期資訊組工作</b>：更新學期開始日、更換三種身分碼（用雜湊產生器）、更新課程連結、發布新版 App。</p><p><b>自我省察</b>：我們是在讓耶穌作王，還是在經營自己的事工？團隊合一嗎？</p>' }
+];
+
+var FORMS = [
+  { role: 'student', t: '請假單', x: '【321學神院請假單】\n姓名：\n小組：\n請假週次：第　週\n原因：\n預計補課日期：\n補討論的同伴：' },
+  { role: 'student', t: '休學申請', x: '【321學神院休學申請】\n姓名：\n小組：\n休學學期：\n原因：\n預計復學：\n組長意見：\n助教意見：' },
+  { role: 'student', t: '報名表', x: '【321學神院報名表】\n姓名：\n所在國家／城市與時區：\n所屬教會：\n得救見證（300字內）：\n為什麼想來學神院：\n每週可穩定上線的時段：\n推薦人：' },
+  { role: 'leader', t: '副組長／組長推薦表', x: '【組長推薦表】\n被推薦人：\n推薦人（組長）：\n生命（920 的光景）：\n關係（與同伴、組員）：\n服事（忠心、受教）：\n助教意見：' },
+  { role: 'ta', t: '一對一約談記錄', x: '【助教約談記錄】\n日期：\n組長：\n生命（與神的關係）：\n關係（家庭、小組）：\n事工（帶領的喜樂與難處）：\n代禱事項：\n下次跟進：' },
+  { role: 'head', t: '面試記錄表', x: '【新生面試記錄】\n日期：\n報名者：\n面試同工：\n一、生命（得救見證）：\n二、心志（為何而學）：\n三、時間（可投入時段）：\n禱告後的共識：□錄取　□暫緩　□不錄取\n建議編入小組：' }
+];
+
+var SCENES = [
+  { t: '我想請假', go: ['info', 'rules'], tip: '規章第三章；表單在「資料中心 → 表單範本 → 請假單」。' },
+  { t: '我要帶聚會', go: ['group', 'flow'], tip: '' },
+  { t: '我的組員缺席了', go: ['data', 'hb-leader'], tip: '' },
+  { t: '我不知道該找誰', go: ['info', 'help'], tip: '' },
+  { t: '我要交週報', go: ['group', 'report'], tip: '' },
+  { t: '我換手機了', go: ['data', 'settings'], tip: '' }
+];
+
+/* ===================== 工具 ===================== */
+var KEY = 'xsy321-v1', MEM = null;
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function fnv(str) { var h = 0x811c9dc5; str = unescape(encodeURIComponent('321|' + str)); for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = (h + ((h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24))) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
+function load() { try { var t = localStorage.getItem(KEY); if (t) return JSON.parse(t); } catch (e) { } return MEM; }
+function save() { MEM = S; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
+function blank() { return { profile: null, enroll: {}, lessons: {}, sign: {}, exam: {}, acct: {}, action: {}, agg: { P: {}, G: {}, T: {} }, roster: '', hi: {}, taNote: {} }; }
+var S = load() || blank();
+['enroll', 'lessons', 'sign', 'exam', 'acct', 'action', 'hi', 'taNote'].forEach(function (k) { if (!S[k]) S[k] = {}; });
+if (!S.agg) S.agg = { P: {}, G: {}, T: {} };
+var V = { tab: 'home', sub: null, cid: null, li: null, open: null, mode: 'all', quizRes: null, rw: null, obRole: 'student' };
+function $(id) { return document.getElementById(id); }
+function val(id) { var e = $(id); return e ? e.value.trim() : ''; }
+var toastT;
+function toast(m) { var o = document.querySelector('.toast'); if (o) o.remove(); var d = document.createElement('div'); d.className = 'toast'; d.textContent = m; document.body.appendChild(d); clearTimeout(toastT); toastT = setTimeout(function () { d.remove(); }, 2400); }
+function enc(o) { return '#321R1:' + btoa(unescape(encodeURIComponent(JSON.stringify(o)))); }
+function decAll(text) { var out = [], re = /#321R1:([A-Za-z0-9+\/=]+)/g, m; while ((m = re.exec(text))) { try { out.push(JSON.parse(decodeURIComponent(escape(atob(m[1]))))); } catch (e) { } } return out; }
+function share(text) {
+  if (navigator.share) { navigator.share({ text: text }).catch(function () { }); return; }
+  copy(text);
+}
+function copy(text) {
+  function fb() { var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); toast('已複製，請貼到 LINE 或 WhatsApp'); } catch (e) { toast('請長按文字手動複製'); } ta.remove(); }
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { toast('已複製，請貼到 LINE 或 WhatsApp'); }, fb); else fb();
+}
+
+/* ===================== 學期與週次 ===================== */
+function termStart() { return (S.profile && S.profile.termStart) || CONFIG.termStart; }
+function pd(s) { var a = s.split('-'); return new Date(+a[0], +a[1] - 1, +a[2]); }
+function rawWeek() { return Math.floor((new Date() - pd(termStart())) / 6048e5) + 1; }
+function curWeek() { return Math.max(1, Math.min(CONFIG.weeks, rawWeek())); }
+function weekLabel() { var r = rawWeek(); if (r < 1) return '尚未開學'; if (r > CONFIG.weeks) return '學期已結束'; return '第 ' + r + ' 週'; }
+function weekDates(w) { var d = pd(termStart()); d.setDate(d.getDate() + (w - 1) * 7); var e = new Date(d); e.setDate(e.getDate() + 6); return (d.getMonth() + 1) + '/' + d.getDate() + '–' + (e.getMonth() + 1) + '/' + e.getDate(); }
+function lessonOfWeek(w) { return (w >= 2 && w <= 11) ? w - 2 : -1; }
+function grp() { return ((S.profile && S.profile.group) || '').toUpperCase().replace(/\s/g, ''); }
+function signCode(w, kind) { var n = parseInt(fnv(grp() + '|' + termStart() + '|' + w + '|' + kind), 16) % 10000; return ('000' + n).slice(-4); }
+function rank() { return S.profile ? ROLES[S.profile.role].rank : 0; }
+
+/* ===================== 課程狀態 ===================== */
+function course(id) { for (var i = 0; i < COURSES.length; i++) if (COURSES[i].id === id) return COURSES[i]; }
+function LS(cid, i) { var k = cid + '-' + i; if (!S.lessons[k]) S.lessons[k] = {}; return S.lessons[k]; }
+function LSr(cid, i) { return S.lessons[cid + '-' + i] || {}; }
+function enrolled(c) { return c.mode === 'req' || !!S.enroll[c.id]; }
+function hwDone(c, i) { var l = LSr(c.id, i); if (c.mode === 'self') return !!(l.note && l.note.length >= 5); var h = l.hw; return !!(h && h.done); }
+function quizDone(c, i) { var les = c.lessons[i]; if (!les.quiz) return true; var l = LSr(c.id, i); return (l.best || 0) >= CONFIG.passScore; }
+function lessonDone(c, i) { var l = LSr(c.id, i); return !!l.read && hwDone(c, i) && quizDone(c, i); }
+function courseProg(c) { var n = 0; for (var i = 0; i < c.lessons.length; i++) if (lessonDone(c, i)) n++; return n; }
+function credits() { var r = { req: 0, elec: 0, self: 0 }; COURSES.forEach(function (c) { if (courseProg(c) === c.lessons.length) r[c.mode] += c.credit; }); return r; }
+function reqCourses() { return COURSES.filter(function (c) { return c.mode === 'req'; }); }
+function weekStatus(w) {
+  var li = lessonOfWeek(w), rc = reqCourses(), hw = li >= 0, qz = li >= 0;
+  if (li >= 0) rc.forEach(function (c) { if (c.lessons[li]) { if (!hwDone(c, li)) hw = false; if (!quizDone(c, li)) qz = false; } });
+  var sg = S.sign[w];
+  return { exam: !!S.exam[w], acct: !!(S.acct[w] && S.acct[w].done), sign: !!(sg && (sg.st === '出席' || sg.st === '補課')), hw: hw, quiz: qz, hasLesson: li >= 0 };
+}
+function lamps() {
+  var cw = curWeek(), ex = 0, ac = 0, sg = 0, hwN = 0, hwD = 0, qN = 0, qD = 0;
+  for (var w = 1; w <= cw; w++) { var st = weekStatus(w); if (st.exam) ex++; if (st.acct) ac++; if (st.sign) sg++;
+    var li = lessonOfWeek(w); if (li >= 0) reqCourses().forEach(function (c) { if (!c.lessons[li]) return; hwN++; if (hwDone(c, li)) hwD++; if (c.lessons[li].quiz) { qN++; if (quizDone(c, li)) qD++; } }); }
+  var r = CONFIG.attendRate;
+  return [['920 自省', ex / cw >= r, ex + '/' + cw], ['同伴問責', ac / cw >= r, ac + '/' + cw], ['簽到', sg / cw >= r, sg + '/' + cw], ['作業', hwN > 0 && hwD / hwN >= r, hwD + '/' + hwN], ['測驗', qN > 0 && qD / qN >= r, qD + '/' + qN]];
+}
+
+/* ===================== 共用片段 ===================== */
+function verse(v, vr) { return '<div class="verse">' + esc(v) + '<b>' + esc(vr) + '</b></div>'; }
+function orgChart() {
+  var me = S.profile ? S.profile.role : '';
+  function b(r, t, s) { return '<div class="box' + (me === r ? ' me' : '') + '">' + t + (me === r ? '　← 我在這裡' : '') + '<small>' + s + '</small></div>'; }
+  return '<div class="org"><div class="box king">院長：主耶穌基督<small>真理的聖靈親自教導</small></div><div class="arr">▼</div>' + b('head', '負責人團隊', '五重職份團隊，守望異象') + '<div class="four"><span>教務組</span><span>學務組</span><span>關懷組</span><span>資訊組</span></div><div class="arr">▼</div>' + b('ta', '助教', '每位牧養 3 至 5 位組長') + '<div class="arr">▼</div>' + b('leader', '組長', '帶領一個 235 小組') + '<div class="arr">▼</div>' + b('student', '學員', '2 人同伴・3 人家・5 人團隊') + '</div>';
+}
+function roleBlock(k) { var r = ROLES[k]; return '<h3>' + r.name + '：' + r.pos + '</h3><p class="sub">' + esc(r.ana) + '</p>' + verse(r.v, r.vr) + '<p><b>對上</b>：' + r.up + '<br><b>對下／對旁</b>：' + r.down + '</p><ul>' + r.duty.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul><p class="sub"><b>每週節奏</b>：' + esc(r.weekly) + '</p>'; }
+function flowTable() { return '<div class="scroll"><table class="tbl"><tr><th>分鐘</th><th>時段</th><th>內容</th><th>主責</th></tr>' + FLOW.map(function (f) { return '<tr><td>' + f[0] + '</td><td><b>' + f[1] + '</b></td><td>' + f[2] + '</td><td>' + f[3] + '</td></tr>'; }).join('') + '</table></div>'; }
+function calTable() { var cw = rawWeek(); return '<p class="sub">' + esc(CONFIG.termName) + '，開始日 ' + esc(termStart()) + '（可在設定調整）</p><div class="scroll"><table class="tbl"><tr><th>週</th><th>日期</th><th>內容</th></tr>' + CAL.map(function (c, i) { var w = i + 1; return '<tr' + (w === cw ? ' style="background:var(--gold2)"' : '') + '><td>' + w + '</td><td>' + weekDates(w) + '</td><td>' + esc(c) + (w === cw ? '　← 本週' : '') + '</td></tr>'; }).join('') + '</table></div>'; }
+function infoHtml(s) { return s.h.replace('__ORG__', orgChart()).replace('__ROLES__', ROLE_ORDER.slice().reverse().map(roleBlock).join('') + '<p><b>服事之路</b>（四種角色共同的內在次序）：靈 → 悟 → 命 → 侍 → 神。</p>').replace('__FLOW__', flowTable()).replace('__CAL__', calTable()); }
+
+/* ===================== 首次設定 ===================== */
+function rolePick(sel) { return '<div class="role-pick">' + ROLE_ORDER.map(function (k) { return '<button data-a="obRole" data-r="' + k + '" class="' + (sel === k ? 'on' : '') + '"><b>' + ROLES[k].name + '</b><small>' + ROLES[k].pos + '</small></button>'; }).join('') + '</div>'; }
+function renderOnboard() {
+  return '<header class="top"><div class="logo">321</div><h1>321學神院</h1></header><main><div class="card hero"><h2 style="margin-top:0">歡迎回家</h2><p>院長是主耶穌基督，真理的聖靈親自教導我們學習神、活出神的形像和樣式。</p>' + verse('你們要先求他的國和他的義，這些東西都要加給你們了。', '馬太福音六章33節') + '</div><div class="card"><label>我的姓名</label><input type="text" id="ob-name" placeholder="請輸入姓名" value="' + esc(V.obName || '') + '"><label>我的角色</label>' + rolePick(V.obRole) + (V.obRole !== 'student' ? '<label>' + ROLES[V.obRole].name + '身分碼</label><input type="password" id="ob-code" placeholder="請輸入身分碼" autocomplete="off">' : '') + '<label>小組代碼</label><input type="text" id="ob-group" placeholder="例如 A01（由組長或學務組提供）" value="' + esc(V.obGroup || '') + '"><p class="sub">同一小組的人必須填相同的代碼，簽到碼才會一致。負責人與助教可填自己所屬的小組。</p><button class="pri full" data-a="obDone">進入學神院</button></div><p class="sub center">資料只存在這支手機，不會上傳。</p></main>';
+}
+
+/* ===================== 我的位置 ===================== */
+function todoItem(done, t, s, to) { return '<div class="todo' + (done ? ' done' : '') + '" data-a="go" data-to="' + to + '"><div class="dot">✓</div><div class="t">' + t + '<small>' + s + '</small></div><div class="go">›</div></div>'; }
+function renderHome() {
+  var p = S.profile, r = ROLES[p.role], w = curWeek(), st = weekStatus(w), li = lessonOfWeek(w), rk = rank();
+  var h = '<div class="card hero"><span class="chip gold">' + r.name + '</span><h2 style="margin:6px 0 2px">' + esc(p.name) + '，平安</h2><p><b>我的定位</b>：' + r.pos + '</p><p class="sub">' + esc(r.ana) + '</p><p class="sub">' + esc(r.imit) + '</p>' + verse(r.v, r.vr) + '</div>';
+  h += '<div class="card"><div class="row"><h3 class="grow" style="margin:0">本週待辦</h3><span class="chip">' + weekLabel() + '　' + weekDates(w) + '</span></div><p class="sub">次序：先與神、再與自己、再與人、後與事。</p>';
+  h += todoItem(st.exam, '920 生命自省', '先顧生命：九果自評與有己時刻', 'group:exam');
+  h += todoItem(st.acct, '同伴問責', '與 2 同伴互問四句' + (p.partner ? '（' + esc(p.partner) + '）' : ''), 'group:acct');
+  h += todoItem(st.sign, '聚會簽到', li >= 0 ? '聚會中輸入組長宣布的簽到碼' : (w === 1 ? '開學與立約' : '回顧、見證與感恩'), 'group:sign');
+  if (li >= 0) reqCourses().forEach(function (c) { if (!c.lessons[li]) return; h += todoItem(lessonDone(c, li), c.title + '　第 ' + (li + 1) + ' 課', esc(c.lessons[li].t) + '：閱讀、作業、測驗', 'lesson:' + c.id + ':' + li); });
+  h += todoItem(false, '送出個人週報', '聚會前傳給組長' + (p.leader ? ' ' + esc(p.leader) : ''), 'group:report');
+  if (rk >= 1) h += todoItem(false, '組長：宣布簽到碼、彙整小組週報', '聚會後 2 天內傳給助教', 'group:leader');
+  if (rk >= 2) h += todoItem(false, '助教：彙整各組週報', '每週日傳給負責人團隊', 'group:ta');
+  if (rk >= 3) h += todoItem(false, '負責人：閱讀助教週報、為全院禱告', '有回報必有回應', 'group:head');
+  h += '</div>';
+  var lp = lamps();
+  h += '<div class="card"><h3 style="margin:0">本學期五盞燈</h3><p class="sub">鏡子不是尺：只與昨天的自己比，不與別人比。</p><div class="lamps">' + lp.map(function (l) { return '<div class="lamp' + (l[1] ? ' on' : '') + '"><i></i>' + l[0] + '<br>' + l[2] + '</div>'; }).join('') + '</div></div>';
+  h += '<div class="card"><div class="row"><h3 class="grow" style="margin:0">我的上下左右</h3><button class="sm" data-a="go" data-to="data:settings">編輯</button></div><div class="rel mt"><span>院長</span><span>主耶穌基督</span><span>負責人</span><span>負責人團隊（教務・學務・關懷・資訊）</span><span>助教</span><span>' + (esc(p.ta) || '<i class="sub">未填</i>') + '</span><span>組長</span><span>' + (esc(p.leader) || '<i class="sub">未填</i>') + '</span><span>2 同伴</span><span>' + (esc(p.partner) || '<i class="sub">未填</i>') + '</span><span>小組</span><span>' + (esc(p.group) || '<i class="sub">未填</i>') + '</span></div><button class="full" data-a="go" data-to="info:org">看組織架構圖</button></div>';
+  h += '<details><summary>我的職責（' + r.name + '）</summary><div class="body"><p><b>對上</b>：' + r.up + '<br><b>對下／對旁</b>：' + r.down + '</p><ul>' + r.duty.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul><p class="sub"><b>每週節奏</b>：' + esc(r.weekly) + '</p><button class="full" data-a="go" data-to="info:roles">看四種角色的職責</button></div></details>';
+  return h;
+}
+
+/* ===================== 課程 ===================== */
+function renderCourses() {
+  if (V.sub === 'quiz') return renderQuiz();
+  if (V.sub === 'lesson') return renderLesson();
+  if (V.sub === 'course') return renderCourse();
+  var cr = credits(), h = '<h2>課程</h2><div class="card"><div class="row wrap"><span class="chip gold">必修 ' + cr.req + ' 學分</span><span class="chip gold">選修 ' + cr.elec + ' 學分</span><span class="chip gold">自修 ' + cr.self + ' 學分</span></div><p class="sub">結業建議：必修 24、選修 4、自修 2，合計 30 學分。</p></div>';
+  h += '<div class="seg">' + [['all', '全部'], ['req', '必修'], ['elec', '選修'], ['self', '自修']].map(function (m) { return '<button data-a="mode" data-m="' + m[0] + '" class="' + (V.mode === m[0] ? 'on' : '') + '">' + m[1] + '</button>'; }).join('') + '</div>';
+  Object.keys(CATS).forEach(function (cat) {
+    var cs = COURSES.filter(function (c) { return c.cat === cat && (V.mode === 'all' || c.mode === V.mode); });
+    if (!cs.length) return;
+    h += '<h3>' + CATS[cat] + '</h3><div class="card" style="padding:4px 14px">';
+    cs.forEach(function (c) { var n = courseProg(c), all = c.lessons.length; h += '<div class="list-item' + (n === all ? ' done' : '') + '" data-a="course" data-c="' + c.id + '"><div class="grow"><b>' + esc(c.title) + '</b><br><span class="chip' + (c.mode === 'req' ? ' gold' : '') + '">' + MODES[c.mode] + '</span><span class="chip">' + c.credit + ' 學分</span>' + (enrolled(c) && c.mode !== 'req' ? '<span class="chip ok">已加選</span>' : '') + '<div class="bar"><i style="width:' + Math.round(n / all * 100) + '%"></i></div></div><div class="sub">' + n + '/' + all + ' ›</div></div>'; });
+    h += '</div>';
+  });
+  return h;
+}
+function renderCourse() {
+  var c = course(V.cid), url = c.link && CONFIG.links[c.link];
+  var h = '<button class="back" data-a="back">‹ 課程</button><div class="card"><span class="chip gold">' + MODES[c.mode] + '</span><span class="chip">' + CATS[c.cat] + '</span><span class="chip">' + c.credit + ' 學分</span><h2 style="margin:6px 0">' + esc(c.title) + '</h2><p class="sub">' + esc(c.desc) + '</p>';
+  if (url) h += '<a class="btn" style="display:block;text-align:center;text-decoration:none" href="' + esc(url) + '" target="_blank" rel="noopener">開啟課程 App</a>';
+  if (c.mode !== 'req') h += '<button class="full ' + (enrolled(c) ? '' : 'pri') + '" data-a="enroll" data-c="' + c.id + '">' + (enrolled(c) ? '已加選（點此退選）' : (c.mode === 'elec' ? '加選這門課' : '開始自修')) + '</button>';
+  h += '</div><div class="card" style="padding:4px 14px">';
+  c.lessons.forEach(function (l, i) { h += '<div class="list-item' + (lessonDone(c, i) ? ' done' : '') + '" data-a="lesson" data-c="' + c.id + '" data-i="' + i + '"><div class="n">' + (lessonDone(c, i) ? '✓' : i + 1) + '</div><div class="grow">' + esc(l.t) + (c.mode === 'req' ? '<br><span class="sub">第 ' + (i + 2) + ' 週</span>' : '') + '</div><div class="sub">›</div></div>'; });
+  return h + '</div>';
+}
+function cnt(s) { return (s || '').replace(/\s/g, '').length; }
+function renderLesson() {
+  var c = course(V.cid), i = V.li, l = c.lessons[i], st = LSr(c.id, i), hw = st.hw || {};
+  var h = '<button class="back" data-a="backCourse">‹ ' + esc(c.title) + '</button><div class="card"><span class="chip gold">第 ' + (i + 1) + ' 課</span><h2 style="margin:6px 0">' + esc(l.t) + '</h2>';
+  if (l.v) h += verse(l.v, l.vr);
+  if (l.ana) h += '<p><b>比喻</b>：' + esc(l.ana) + '</p>';
+  if (l.pts) h += '<p><b>重點</b></p><ul>' + l.pts.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul>';
+  else h += '<p class="sub">本課內容請依教務組提供的講義或課程 App 觀看聆聽，看完回到這裡完成作業。</p>';
+  h += '<div class="todo' + (st.read ? ' done' : '') + '" data-a="read"><div class="dot">✓</div><div class="t">我已看完／聽完這一課</div></div></div>';
+  h += '<div class="card"><h3 style="margin-top:0">討論題</h3><ol>' + (l.dq || GEN_DQ).map(function (q) { return '<li>' + esc(q) + '</li>'; }).join('') + '</ol></div>';
+  if (c.mode === 'self') h += '<div class="card"><h3 style="margin-top:0">一句話心得' + (hwDone(c, i) ? ' <span class="chip ok">已完成</span>' : '') + '</h3><textarea id="note" placeholder="這一課，我最想記住的一句話…">' + esc(st.note || '') + '</textarea><button class="pri full" data-a="saveNote">儲存心得</button></div>';
+  else h += '<div class="card"><h3 style="margin-top:0">作業：三段式' + (hw.done ? ' <span class="chip ok">已繳交 ' + esc(hw.date || '') + '</span>' : '') + '</h3><p class="sub">重在真實，不在漂亮。每段至少 30 字；作業只存在你的手機。</p><label>我的看見 <span id="c-see" class="sub"></span></label><textarea id="hw-see" data-cnt="c-see">' + esc(hw.see || '') + '</textarea><label>我的問題 <span id="c-prob" class="sub"></span></label><textarea id="hw-prob" data-cnt="c-prob">' + esc(hw.prob || '') + '</textarea><label>我的行動 <span id="c-act" class="sub"></span></label><textarea id="hw-act" data-cnt="c-act">' + esc(hw.act || '') + '</textarea><div class="row"><button class="grow" data-a="saveHw" data-d="0">存草稿</button><button class="pri grow" data-a="saveHw" data-d="1">繳交作業</button></div>' + (hw.done ? '<button class="full" data-a="shareHw">分享作業給助教</button>' : '') + '</div>';
+  if (l.quiz) h += '<div class="card"><div class="row"><div class="grow"><h3 style="margin:0">測驗</h3><span class="sub">' + l.quiz.length + ' 題，' + CONFIG.passScore + ' 分通過，可重測' + (st.best != null ? '；最高 ' + st.best + ' 分（第 ' + st.tries + ' 次）' : '') + '</span></div>' + (quizDone(c, i) && st.best != null ? '<span class="chip ok">通過</span>' : '') + '</div><button class="navy full" data-a="quiz">' + (st.best != null ? '再測一次' : '開始測驗') + '</button></div>';
+  return h;
+}
+function renderQuiz() {
+  var c = course(V.cid), l = c.lessons[V.li], res = V.quizRes;
+  var h = '<button class="back" data-a="backLesson">‹ ' + esc(l.t) + '</button><div class="card"><h2 style="margin-top:0">測驗</h2>';
+  if (res) h += '<div class="center"><div class="code" style="letter-spacing:0">' + res.score + ' 分</div><p>' + (res.score >= CONFIG.passScore ? '通過了，感謝主！看看解析，溫故知新。' : '還差一點。看完解析再測一次，鏡子是用來照的，不是用來怕的。') + '</p></div>';
+  l.quiz.forEach(function (q, qi) {
+    h += '<div class="q"><b>' + (qi + 1) + '. ' + esc(q.q) + '</b>';
+    q.o.forEach(function (o, oi) { var cls = ''; if (res) { if (oi === q.a) cls = ' right'; else if (res.ans[qi] === oi) cls = ' wrong'; } h += '<label class="opt' + cls + '"><input type="radio" name="q' + qi + '" value="' + oi + '"' + (res ? ' disabled' : '') + (res && res.ans[qi] === oi ? ' checked' : '') + '><span style="font-weight:400;color:var(--ink);font-size:16px">' + esc(o) + '</span></label>'; });
+    if (res) h += '<div class="exp">解析：' + esc(q.e) + '</div>';
+    h += '</div>';
+  });
+  h += res ? '<div class="row"><button class="grow" data-a="backLesson">回到課程</button><button class="pri grow" data-a="quiz">再測一次</button></div>' : '<button class="pri full" data-a="submitQuiz">交卷</button>';
+  return h + '</div>';
+}
+
+/* ===================== 小組 ===================== */
+function renderGroup() {
+  var f = { flow: gFlow, sign: gSign, exam: gExam, acct: gAcct, report: gReport, leader: gLeader, ta: gTa, head: gHead }[V.sub];
+  if (f) return '<button class="back" data-a="back">‹ 小組</button>' + f();
+  var w = curWeek(), st = weekStatus(w), p = S.profile, rk = rank();
+  function it(to, t, s, done) { return '<div class="list-item' + (done ? ' done' : '') + '" data-a="go" data-to="group:' + to + '"><div class="n">' + (done ? '✓' : '·') + '</div><div class="grow"><b>' + t + '</b><br><span class="sub">' + s + '</span></div><div class="sub">›</div></div>'; }
+  var h = '<h2>小組</h2><div class="card"><div class="row wrap"><span class="chip gold">小組 ' + (esc(p.group) || '未填') + '</span><span class="chip">' + weekLabel() + '</span></div><p class="sub">看、談、行、問：一起看課、一起談課、各自行道、彼此問責。</p></div><div class="card" style="padding:4px 14px">';
+  h += it('flow', '本週聚會', '六段流程、本週課程與討論題、本週行動', !!S.action[w]);
+  h += it('sign', '聚會簽到', st.sign ? '已' + S.sign[w].st : '輸入簽到碼或補課碼、請假', st.sign);
+  h += it('exam', '920 生命自省', '九果自評、有己時刻、感恩、成長軌跡', st.exam);
+  h += it('acct', '同伴問責', '互問四句、代禱事項', st.acct);
+  h += it('report', '個人週報', '一鍵產生，傳給組長', false);
+  h += '</div>';
+  if (rk >= 1) { h += '<h3>同工專區</h3><div class="card" style="padding:4px 14px">' + it('leader', '組長：簽到碼與小組週報', '宣布簽到碼、貼上組員週報自動彙整', false); if (rk >= 2) h += it('ta', '助教：各組彙整與助教週報', '貼上小組週報自動彙整', false); if (rk >= 3) h += it('head', '負責人：全院概況', '貼上助教週報自動彙整', false); h += '</div>'; }
+  return h;
+}
+function gFlow() {
+  var w = curWeek(), li = lessonOfWeek(w), h = '<h2>本週聚會</h2><div class="card"><span class="chip gold">' + weekLabel() + '</span><p><b>' + esc(CAL[w - 1]) + '</b></p>' + flowTable() + '</div>';
+  if (li >= 0) { h += '<div class="card"><h3 style="margin-top:0">本週課程</h3>'; reqCourses().forEach(function (c) { if (c.lessons[li]) h += '<div class="list-item" data-a="go" data-to="lesson:' + c.id + ':' + li + '"><div class="grow"><b>' + esc(c.title) + '</b><br><span class="sub">第 ' + (li + 1) + ' 課　' + esc(c.lessons[li].t) + '</span></div><div class="sub">›</div></div>'; }); h += '<h3>討論三題</h3><ol>' + GEN_DQ.map(function (q) { return '<li>' + esc(q) + '</li>'; }).join('') + '</ol></div>'; }
+  h += '<div class="card"><h3 style="margin-top:0">我的本週行動</h3><p class="sub">一項就好，要具體、可行、可問責，並告訴你的同伴。</p><textarea id="action" placeholder="例如：這週每天晚餐後，先問太太今天過得如何，專心聽 10 分鐘。">' + esc(S.action[w] || '') + '</textarea><button class="pri full" data-a="saveAction">儲存</button></div>';
+  return h;
+}
+function gSign() {
+  var w = curWeek(), sg = S.sign[w], h = '<h2>聚會簽到</h2>';
+  if (sg) h += '<div class="card center"><span class="chip ok">' + weekLabel() + '　已' + esc(sg.st) + '</span><p class="sub">' + esc(sg.time) + '</p><button class="sm" data-a="unsign">重新簽到</button></div>';
+  else h += '<div class="card"><p class="sub">先安靜片刻，把這段時間交給主，再輸入組長在聚會中宣布的四位數簽到碼。補課者請輸入補課碼。</p><input type="text" id="sign-code" inputmode="numeric" maxlength="4" placeholder="四位數簽到碼" style="text-align:center;font-size:24px;letter-spacing:6px"><button class="pri full" data-a="sign">簽到</button><button class="full" data-a="leave">本週請假（已告知組長）</button></div>';
+  h += '<div class="card"><h3 style="margin-top:0">出席紀錄</h3><div class="row wrap">';
+  for (var i = 1; i <= CONFIG.weeks; i++) { var s = S.sign[i]; h += '<span class="chip ' + (s ? (s.st === '請假' ? 'warn' : 'ok') : '') + '">' + i + ' ' + (s ? s.st : (i <= curWeek() ? '—' : '')) + '</span>'; }
+  return h + '</div><p class="sub">出席率達 80% 方得學期學分；請假後 7 天內補課可改記「補課」。</p></div>';
+}
+function trend() {
+  var pts = []; for (var w = 1; w <= CONFIG.weeks; w++) { var e = S.exam[w]; if (e) pts.push([w, e.sc.reduce(function (a, b) { return a + b; }, 0) / 9]); }
+  if (pts.length < 2) return '<p class="sub">填寫兩週以上，這裡會出現你的成長軌跡。</p>';
+  var X = function (w) { return 24 + (w - 1) * (272 / (CONFIG.weeks - 1)); }, Y = function (v) { return 110 - (v - 1) * 25; };
+  var g = ''; for (var v = 1; v <= 5; v++) g += '<line x1="24" x2="296" y1="' + Y(v) + '" y2="' + Y(v) + '" stroke="var(--line)"/><text x="4" y="' + (Y(v) + 4) + '" font-size="10" fill="var(--sub)">' + v + '</text>';
+  return '<svg viewBox="0 0 304 130" width="100%" role="img" aria-label="920 九果平均逐週折線圖">' + g + '<polyline fill="none" stroke="var(--gold)" stroke-width="2.5" points="' + pts.map(function (p) { return X(p[0]) + ',' + Y(p[1]); }).join(' ') + '"/>' + pts.map(function (p) { return '<circle cx="' + X(p[0]) + '" cy="' + Y(p[1]) + '" r="3.5" fill="var(--gold)"><title>第' + p[0] + '週 平均 ' + p[1].toFixed(1) + '</title></circle><text x="' + X(p[0]) + '" y="126" font-size="9" text-anchor="middle" fill="var(--sub)">' + p[0] + '</text>'; }).join('') + '</svg><p class="sub center">九果平均（1–5）・橫軸為週次</p>';
+}
+function gExam() {
+  var w = curWeek(), e = S.exam[w] || { sc: [3, 3, 3, 3, 3, 3, 3, 3, 3], self: '', th: '' };
+  var h = '<h2>920 生命自省</h2><div class="card">' + verse('聖靈所結的果子，就是仁愛、喜樂、和平、忍耐、恩慈、良善、信實、溫柔、節制。', '加拉太書五章22至23節') + '<p class="sub">在每一個「2」面前操練「0」，就結出「9」。這份自省只存在你的手機，不會進入週報。</p>';
+  FRUITS.forEach(function (f, i) { h += '<div class="fruit"><span>' + f + '</span><input type="range" min="1" max="5" step="1" value="' + e.sc[i] + '" id="fr' + i + '" data-out="fo' + i + '"><b id="fo' + i + '">' + e.sc[i] + '</b></div>'; });
+  h += '<label>這週「有己」醒來的時刻</label><textarea id="ex-self" placeholder="什麼時候、在誰面前，我又想自己作主了？">' + esc(e.self) + '</textarea><label>這週的一項感恩</label><textarea id="ex-th" placeholder="凡事謝恩，把榮耀歸給耶穌。">' + esc(e.th) + '</textarea><button class="pri full" data-a="saveExam">' + (S.exam[w] ? '更新' : '完成') + weekLabel() + '自省</button></div><div class="card"><h3 style="margin-top:0">成長軌跡</h3>' + trend() + '</div>';
+  return h;
+}
+function gAcct() {
+  var w = curWeek(), a = S.acct[w] || {};
+  return '<h2>同伴問責</h2><div class="card"><p>我的 2 同伴：<b>' + (esc(S.profile.partner) || '未填（到設定填寫）') + '</b></p><p class="sub">謙卑對謙卑：只問自己的問題，不指責對方的問題。</p><ol>' + ACCT_Q.map(function (q) { return '<li>' + q + '</li>'; }).join('') + '</ol><label>同伴的代禱事項（只存在手機）</label><textarea id="ac-pray">' + esc(a.pray || '') + '</textarea><label>我請同伴為我禱告的事（會進入週報）</label><textarea id="ac-mine">' + esc(a.mine || '') + '</textarea><button class="pri full" data-a="saveAcct">' + (a.done ? '更新' : '本週已完成問責') + '</button></div>';
+}
+function myReport(w) {
+  var st = weekStatus(w), p = S.profile, e = S.exam[w] || {}, a = S.acct[w] || {}, sg = S.sign[w];
+  var o = { t: 'P', n: p.name, g: grp(), w: w, sg: sg ? sg.st : '未簽到', l: [st.exam, st.acct, st.sign, st.hw, st.quiz].map(function (b) { return b ? 1 : 0; }), a: S.action[w] || '', th: e.th || '', pr: a.mine || '' };
+  var mk = function (b) { return b ? '✓' : '—'; };
+  var txt = '【321學神院 個人週報】\n' + p.name + '｜小組 ' + (p.group || '') + '｜第 ' + w + ' 週\n簽到：' + o.sg + '\n920自省 ' + mk(st.exam) + '　同伴問責 ' + mk(st.acct) + '　作業 ' + mk(st.hw) + '　測驗 ' + mk(st.quiz) + '\n本週行動：' + (o.a || '（未填）') + '\n感恩：' + (o.th || '（未填）') + '\n代禱：' + (o.pr || '（未填）') + '\n' + enc(o);
+  return txt;
+}
+function weekSel() { var cw = curWeek(), w = V.rw || cw, h = '<label>週次</label><select id="rw" data-a-change="rw">'; for (var i = cw; i >= 1; i--) h += '<option value="' + i + '"' + (i === w ? ' selected' : '') + '>第 ' + i + ' 週（' + weekDates(i) + '）</option>'; return h + '</select>'; }
+function gReport() { var w = V.rw || curWeek(), t = myReport(w); return '<h2>個人週報</h2><div class="card">' + weekSel() + '<pre class="out" id="out">' + esc(t) + '</pre><p class="sub">920 分數、有己時刻與作業全文不會出現在週報。最後一行代碼請保留，組長的 App 靠它自動彙整。</p><button class="pri full" data-a="shareOut">產生並分享給組長</button><button class="full" data-a="copyOut">複製文字</button></div>'; }
+function pasteBox(kind, who) { return '<div class="card"><h3 style="margin-top:0">貼上' + who + '</h3><p class="sub">可一次貼上多份，App 會自動辨識每份最後一行的代碼。</p><textarea id="paste" placeholder="把收到的週報整段貼在這裡"></textarea><button class="navy full" data-a="importRep" data-k="' + kind + '">匯入並彙整</button></div>'; }
+function aggList(kind, w) { var o = S.agg[kind], out = []; Object.keys(o).forEach(function (k) { if (o[k].w === w) out.push(o[k]); }); return out; }
+function sum(a) { return a.reduce(function (x, y) { return x + y; }, 0); }
+function needCare(m) { return (m.sg !== '出席' && m.sg !== '補課') || sum(m.l) < 3; }
+function gLeader() {
+  var w = V.rw || curWeek(), list = aggList('P', w).filter(function (m) { return !grp() || m.g === grp(); }), names = list.map(function (m) { return m.n; });
+  var roster = (S.roster || '').split(/\n/).map(function (s) { return s.trim(); }).filter(Boolean), miss = roster.filter(function (n) { return names.indexOf(n) < 0; });
+  var h = '<h2>組長專區</h2><div class="card center"><p class="sub">小組 ' + (esc(S.profile.group) || '未填') + '・' + weekLabel() + '　在聚會「簽到與近況」時宣布</p><div class="code">' + signCode(curWeek(), 'IN') + '</div><p class="sub">補課碼（只給完成補課的人）：<b>' + signCode(curWeek(), 'MK') + '</b></p></div>';
+  h += '<div class="card">' + weekSel() + '<h3>組員狀況（' + list.length + ' 份週報）</h3>';
+  if (list.length) h += '<div class="scroll"><table class="tbl"><tr><th>姓名</th><th>簽到</th><th>自省</th><th>問責</th><th>作業</th><th>測驗</th></tr>' + list.map(function (m) { return '<tr><td>' + esc(m.n) + (needCare(m) ? ' <span class="chip warn">關懷</span>' : '') + '</td><td>' + esc(m.sg) + '</td><td>' + (m.l[0] ? '✓' : '—') + '</td><td>' + (m.l[1] ? '✓' : '—') + '</td><td>' + (m.l[3] ? '✓' : '—') + '</td><td>' + (m.l[4] ? '✓' : '—') + '</td></tr>'; }).join('') + '</table></div>' + list.filter(function (m) { return m.pr || m.a; }).map(function (m) { return '<p class="sub"><b>' + esc(m.n) + '</b>　行動：' + esc(m.a || '—') + '　代禱：' + esc(m.pr || '—') + '</p>'; }).join('');
+  else h += '<p class="sub">尚未匯入本週的組員週報。</p>';
+  if (miss.length) h += '<p><span class="chip warn">尚未交週報</span> ' + miss.map(esc).join('、') + '</p>';
+  h += '</div>' + pasteBox('P', '組員的個人週報');
+  h += '<div class="card"><h3 style="margin-top:0">組員名冊</h3><p class="sub">一行一位，用來提醒誰還沒交週報。</p><textarea id="roster">' + esc(S.roster || '') + '</textarea><button class="full" data-a="saveRoster">儲存名冊</button></div>';
+  h += '<div class="card"><h3 style="margin-top:0">小組週報</h3><label>本週小組亮點（感恩與見證）</label><textarea id="hi">' + esc(S.hi[w] || '') + '</textarea><button class="pri full" data-a="groupRep">產生並分享給助教</button></div>';
+  return h;
+}
+function groupReport(w) {
+  var list = aggList('P', w).filter(function (m) { return !grp() || m.g === grp(); }), care = list.filter(needCare).map(function (m) { return m.n; });
+  var roster = (S.roster || '').split(/\n/).map(function (s) { return s.trim(); }).filter(Boolean); roster.forEach(function (n) { if (!list.some(function (m) { return m.n === n; }) && care.indexOf(n) < 0) care.push(n); });
+  var att = list.filter(function (m) { return m.sg === '出席' || m.sg === '補課'; }).length, tot = Math.max(list.length, roster.length);
+  var o = { t: 'G', g: grp(), w: w, ld: S.profile.name, tot: tot, att: att, hw: list.filter(function (m) { return m.l[3]; }).length, qz: list.filter(function (m) { return m.l[4]; }).length, care: care, hi: S.hi[w] || '' };
+  return '【321學神院 小組週報】\n小組 ' + o.g + '｜組長 ' + o.ld + '｜第 ' + w + ' 週\n出席：' + att + '/' + tot + '　作業：' + o.hw + '/' + tot + '　測驗：' + o.qz + '/' + tot + '\n需關懷：' + (care.join('、') || '無') + '\n小組亮點：' + (o.hi || '（未填）') + '\n' + enc(o);
+}
+function gTa() {
+  var w = V.rw || curWeek(), list = aggList('G', w), n = S.taNote[w] || {};
+  var h = '<h2>助教專區</h2><div class="card">' + weekSel() + '<h3>各組概況（' + list.length + ' 組）</h3>';
+  if (list.length) h += '<div class="scroll"><table class="tbl"><tr><th>小組</th><th>組長</th><th>出席</th><th>作業</th><th>測驗</th><th>需關懷</th></tr>' + list.map(function (g) { return '<tr><td>' + esc(g.g) + '</td><td>' + esc(g.ld) + '</td><td>' + g.att + '/' + g.tot + '</td><td>' + g.hw + '/' + g.tot + '</td><td>' + g.qz + '/' + g.tot + '</td><td>' + (esc(g.care.join('、')) || '—') + '</td></tr>'; }).join('') + '</table></div>' + list.filter(function (g) { return g.hi; }).map(function (g) { return '<p class="sub"><b>' + esc(g.g) + ' 亮點</b>：' + esc(g.hi) + '</p>'; }).join('');
+  else h += '<p class="sub">尚未匯入本週的小組週報。</p>';
+  h += '</div>' + pasteBox('G', '各組的小組週報') + '<div class="card"><h3 style="margin-top:0">助教週報</h3><label>需負責人團隊介入的事</label><textarea id="ta-need">' + esc(n.need || '') + '</textarea><label>接棒人選觀察</label><textarea id="ta-succ">' + esc(n.succ || '') + '</textarea><button class="pri full" data-a="taRep">產生並分享給負責人團隊</button></div>';
+  return h;
+}
+function taReport(w) {
+  var list = aggList('G', w), n = S.taNote[w] || {}, o = { t: 'T', n: S.profile.name, w: w, gs: list.map(function (g) { return { g: g.g, ld: g.ld, tot: g.tot, att: g.att, hw: g.hw, qz: g.qz, care: g.care.length }; }), need: n.need || '', succ: n.succ || '' };
+  return '【321學神院 助教週報】\n助教 ' + o.n + '｜第 ' + w + ' 週｜' + list.length + ' 組\n' + list.map(function (g) { return g.g + '（' + g.ld + '）出席 ' + g.att + '/' + g.tot + '　作業 ' + g.hw + '　測驗 ' + g.qz + '　需關懷 ' + g.care.length; }).join('\n') + '\n需負責人介入：' + (o.need || '無') + '\n接棒人選觀察：' + (o.succ || '（未填）') + '\n' + enc(o);
+}
+function gHead() {
+  var w = V.rw || curWeek(), list = aggList('T', w), G = 0, tot = 0, att = 0, hw = 0, qz = 0, care = 0;
+  list.forEach(function (t) { t.gs.forEach(function (g) { G++; tot += g.tot; att += g.att; hw += g.hw; qz += g.qz; care += g.care; }); });
+  var pc = function (a) { return tot ? Math.round(a / tot * 100) + '%' : '—'; };
+  var h = '<h2>全院概況</h2><div class="card">' + weekSel() + '<div class="row wrap mt"><span class="chip gold">' + list.length + ' 位助教</span><span class="chip gold">' + G + ' 組</span><span class="chip gold">' + tot + ' 位學員</span><span class="chip ok">出席 ' + pc(att) + '</span><span class="chip ok">作業 ' + pc(hw) + '</span><span class="chip ok">測驗 ' + pc(qz) + '</span><span class="chip warn">需關懷 ' + care + '</span></div>';
+  list.forEach(function (t) { h += '<h3>助教 ' + esc(t.n) + '</h3><div class="scroll"><table class="tbl"><tr><th>小組</th><th>組長</th><th>出席</th><th>作業</th><th>測驗</th><th>關懷</th></tr>' + t.gs.map(function (g) { return '<tr><td>' + esc(g.g) + '</td><td>' + esc(g.ld) + '</td><td>' + g.att + '/' + g.tot + '</td><td>' + g.hw + '</td><td>' + g.qz + '</td><td>' + g.care + '</td></tr>'; }).join('') + '</table></div>' + (t.need ? '<p><span class="chip warn">需介入</span> ' + esc(t.need) + '</p>' : '') + (t.succ ? '<p class="sub">接棒觀察：' + esc(t.succ) + '</p>' : ''); });
+  if (!list.length) h += '<p class="sub">尚未匯入本週的助教週報。</p>';
+  return h + '<p class="sub">數字是為了看見人：每一個「需關懷」背後，都是主所愛的一個人。</p></div>' + pasteBox('T', '助教週報');
+}
+
+/* ===================== 學神院 ===================== */
+function renderInfo() { return '<h2>學神院</h2><p class="sub">制度是為了成全人，不是為了管人。</p>' + INFO.map(function (s) { return '<details id="info-' + s.id + '"' + (V.open === s.id ? ' open' : '') + '><summary>' + s.t + '</summary><div class="body">' + infoHtml(s) + '</div></details>'; }).join(''); }
+
+/* ===================== 資料中心 ===================== */
+var IDX = null;
+function strip(h) { return h.replace(/__\w+__/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' '); }
+function buildIdx() {
+  IDX = [];
+  INFO.forEach(function (s) { IDX.push({ t: '制度｜' + s.t, x: strip(s.id === 'roles' ? ROLE_ORDER.map(function (k) { var r = ROLES[k]; return r.name + r.pos + r.duty.join(' '); }).join(' ') : s.h), to: 'info:' + s.id }); });
+  GLOSSARY.forEach(function (g) { IDX.push({ t: '理念｜' + g[0], x: g[1], to: 'data:glossary' }); });
+  FAQ.forEach(function (f) { IDX.push({ t: '常見問題｜' + f[0], x: f[1], to: 'data:faq' }); });
+  HANDBOOKS.forEach(function (b) { if (ROLES[b.role].rank <= rank()) IDX.push({ t: '手冊｜' + b.t, x: strip(b.h), to: 'data:hb-' + b.role }); });
+  FORMS.forEach(function (f) { if (ROLES[f.role].rank <= rank()) IDX.push({ t: '表單｜' + f.t, x: f.x, to: 'data:forms' }); });
+  COURSES.forEach(function (c) { IDX.push({ t: '課程｜' + c.title, x: c.desc, to: 'course:' + c.id }); c.lessons.forEach(function (l, i) { IDX.push({ t: '課程｜' + c.title + ' 第' + (i + 1) + '課 ' + l.t, x: (l.pts || []).join(' ') + (l.v || ''), to: 'lesson:' + c.id + ':' + i }); }); });
+}
+function hits(q) {
+  if (!q) return ''; if (!IDX) buildIdx(); var ql = q.toLowerCase(), out = [];
+  IDX.forEach(function (d) { var it = d.t.toLowerCase().indexOf(ql), ix = d.x.toLowerCase().indexOf(ql); if (it < 0 && ix < 0) return; var sn = ix >= 0 ? d.x.slice(Math.max(0, ix - 18), ix + q.length + 40) : d.x.slice(0, 58); out.push('<div class="hit" data-a="go" data-to="' + d.to + '"><b>' + esc(d.t) + '</b><span>' + esc(sn).split(esc(q)).join('<mark>' + esc(q) + '</mark>') + '…</span></div>'); });
+  return out.length ? '<p class="sub">找到 ' + out.length + ' 筆</p>' + out.slice(0, 40).join('') : '<p class="sub">找不到「' + esc(q) + '」。換個關鍵字，或到「學神院 → 遇到問題找誰」。</p>';
+}
+function lockNote(role) { return '<p class="sub">🔒 需要「' + ROLES[role].name + '」以上的身分才能閱讀。</p>'; }
+function renderData() {
+  var rk = rank(), op = function (id) { return V.open === id ? ' open' : ''; };
+  var h = '<h2>資料中心</h2><input type="search" id="q" placeholder="搜尋：請假、簽到碼、無己、面試…" value="' + esc(V.q || '') + '"><div id="hits">' + hits(V.q) + '</div>';
+  h += '<h3>我現在要…</h3><div class="scn">' + SCENES.map(function (s) { return '<button data-a="go" data-to="' + s.go.join(':') + '">' + s.t + '</button>'; }).join('') + '</div>';
+  h += '<h3>角色手冊</h3>' + HANDBOOKS.map(function (b) { var ok = ROLES[b.role].rank <= rk || b.role === 'student'; return '<details id="hb-' + b.role + '"' + op('hb-' + b.role) + '><summary>' + b.t + (ok ? '' : '　🔒') + '</summary><div class="body">' + (ok ? b.h : lockNote(b.role)) + '</div></details>'; }).join('');
+  h += '<h3>表單範本</h3><details id="forms"' + op('forms') + '><summary>表單（點按鈕即可複製）</summary><div class="body">' + FORMS.map(function (f, i) { var ok = ROLES[f.role].rank <= rk; return '<div class="row" style="padding:6px 0"><div class="grow">' + f.t + (ok ? '' : '　🔒 ' + ROLES[f.role].name) + '</div>' + (ok ? '<button class="sm" data-a="copyForm" data-i="' + i + '">複製</button>' : '') + '</div>'; }).join('') + '</div></details>';
+  h += '<h3>速查</h3><details id="glossary"' + op('glossary') + '><summary>321理念名詞速查</summary><div class="body">' + GLOSSARY.map(function (g) { return '<p><b>' + g[0] + '</b>：' + g[1] + '</p>'; }).join('') + '</div></details>';
+  h += '<details id="faq"' + op('faq') + '><summary>常見問題</summary><div class="body">' + FAQ.map(function (f) { return '<p><b>問：' + f[0] + '</b><br>答：' + f[1] + '</p>'; }).join('') + '</div></details>';
+  var lk = Object.keys(CONFIG.links).filter(function (k) { return CONFIG.links[k]; });
+  if (lk.length) h += '<details><summary>相關學習 App</summary><div class="body">' + lk.map(function (k) { return '<p><a href="' + esc(CONFIG.links[k]) + '" target="_blank" rel="noopener">' + esc(k) + '</a></p>'; }).join('') + '</div></details>';
+  var p = S.profile;
+  h += '<h3>設定與備份</h3><details id="settings"' + op('settings') + '><summary>我的資料與學期</summary><div class="body"><label>姓名</label><input type="text" id="s-name" value="' + esc(p.name) + '"><label>小組代碼</label><input type="text" id="s-group" value="' + esc(p.group || '') + '"><label>我的 2 同伴</label><input type="text" id="s-partner" value="' + esc(p.partner || '') + '"><label>我的組長</label><input type="text" id="s-leader" value="' + esc(p.leader || '') + '"><label>我的助教</label><input type="text" id="s-ta" value="' + esc(p.ta || '') + '"><label>學期開始日（第 1 週的星期一）</label><input type="date" id="s-term" value="' + esc(termStart()) + '"><button class="pri full" data-a="saveProfile">儲存</button></div></details>';
+  h += '<details id="role"' + op('role') + '><summary>變更角色（目前：' + ROLES[p.role].name + '）</summary><div class="body">' + rolePick(V.obRole) + '<label>身分碼（學員免填）</label><input type="password" id="ob-code" autocomplete="off"><button class="navy full" data-a="changeRole">變更角色</button></div></details>';
+  h += '<details id="backup"' + op('backup') + '><summary>備份與還原</summary><div class="body"><p class="sub">資料只存在這支手機。換手機前請匯出備份，傳給自己保存。</p><button class="full" data-a="exportBk">匯出備份（複製）</button><textarea id="bk" placeholder="把備份文字貼在這裡"></textarea><button class="full" data-a="importBk">匯入備份</button><button class="full" style="color:var(--warn)" data-a="reset">清除本機全部資料</button></div></details>';
+  if (rk >= 3) h += '<details><summary>身分碼雜湊產生器（資訊組）</summary><div class="body"><p class="sub">輸入新的身分碼，把產生的雜湊值貼到程式碼 CONFIG.codes，再發布新版。</p><input type="text" id="hg" placeholder="新的身分碼"><button class="full" data-a="hashGen">產生雜湊</button><pre class="out" id="hg-out"></pre></div></details>';
+  return h + '<p class="sub center mt">321學神院 App v' + CONFIG.version + '<br>願人都尊主的名為聖</p>';
+}
+
+/* ===================== 主畫面 ===================== */
+var ICONS = { home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><circle cx="12" cy="14" r="2"/>', course: '<path d="M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2z"/><path d="M4 21V5"/><path d="M9 8h6"/>', group: '<circle cx="8" cy="9" r="3"/><circle cx="17" cy="10" r="2.4"/><path d="M2.5 20c.5-3.5 2.7-5.5 5.5-5.5s5 2 5.5 5.5"/><path d="M15 15c3 0 5 1.6 5.6 4.5"/>', info: '<path d="M3 10l9-6 9 6"/><path d="M5 10v9M9.5 10v9M14.5 10v9M19 10v9"/><path d="M3 20h18"/>', data: '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/>' };
+var TABS = [['home', '我的位置'], ['course', '課程'], ['group', '小組'], ['info', '學神院'], ['data', '資料中心']];
+function render() {
+  var root = $('root');
+  if (!S.profile) { root.innerHTML = renderOnboard(); return; }
+  var body = { home: renderHome, course: renderCourses, group: renderGroup, info: renderInfo, data: renderData }[V.tab]();
+  root.innerHTML = '<header class="top"><div class="logo">321</div><h1>321學神院</h1><span class="wk">' + weekLabel() + '</span></header><main>' + body + '</main><nav class="tabs">' + TABS.map(function (t) { return '<button data-a="tab" data-t="' + t[0] + '" class="' + (V.tab === t[0] ? 'on' : '') + '"><svg viewBox="0 0 24 24">' + ICONS[t[0]] + '</svg>' + t[1] + '</button>'; }).join('') + '</nav>';
+  document.querySelectorAll('textarea[data-cnt]').forEach(updCnt);
+  if (V.open && (V.tab === 'info' || V.tab === 'data')) { var el = $(V.tab === 'info' ? 'info-' + V.open : V.open); if (el) setTimeout(function () { el.scrollIntoView({ block: 'start' }); window.scrollBy(0, -64); }, 30); }
+  else window.scrollTo(0, 0);
+}
+function updCnt(t) { var o = $(t.getAttribute('data-cnt')); if (o) { var n = cnt(t.value); o.textContent = '（' + n + ' 字' + (n < 30 ? '，還差 ' + (30 - n) : ' ✓') + '）'; } }
+function go(to) {
+  var a = to.split(':'); V.quizRes = null; V.open = null; V.sub = null;
+  if (a[0] === 'lesson') { V.tab = 'course'; V.sub = 'lesson'; V.cid = a[1]; V.li = +a[2]; }
+  else if (a[0] === 'course') { V.tab = 'course'; V.sub = 'course'; V.cid = a[1]; }
+  else if (a[0] === 'group') { V.tab = 'group'; V.sub = a[1] || null; V.rw = null; }
+  else { V.tab = a[0]; V.open = a[1] || null; }
+  render();
+}
+function checkCode(role, code) { return role === 'student' || fnv(code.trim().toUpperCase()) === CONFIG.codes[role]; }
+function now() { var d = new Date(); return d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate() + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
+
+var ACT = {
+  tab: function (d) { V.tab = d.t; V.sub = null; V.open = null; V.quizRes = null; V.rw = null; render(); },
+  go: function (d) { go(d.to); },
+  back: function () { V.sub = null; V.rw = null; render(); },
+  backCourse: function () { V.sub = 'course'; render(); },
+  backLesson: function () { V.sub = 'lesson'; V.quizRes = null; render(); },
+  mode: function (d) { V.mode = d.m; render(); },
+  course: function (d) { V.cid = d.c; V.sub = 'course'; render(); },
+  lesson: function (d) { V.cid = d.c; V.li = +d.i; V.sub = 'lesson'; render(); },
+  obRole: function (d) { V.obName = val('ob-name') || V.obName; V.obGroup = val('ob-group') || V.obGroup; V.obRole = d.r; if (S.profile) V.open = 'role'; render(); },
+  obDone: function () {
+    var n = val('ob-name'); if (!n) return toast('請輸入姓名');
+    if (!checkCode(V.obRole, val('ob-code'))) return toast('身分碼不正確，請向上一級同工確認');
+    S.profile = { name: n, role: V.obRole, group: val('ob-group'), partner: '', leader: '', ta: '' }; save(); V.tab = 'home'; render(); toast('歡迎，' + n);
+  },
+  changeRole: function () { if (!checkCode(V.obRole, val('ob-code'))) return toast('身分碼不正確'); S.profile.role = V.obRole; save(); IDX = null; V.tab = 'home'; V.open = null; render(); toast('角色已變更為' + ROLES[V.obRole].name); },
+  enroll: function (d) { S.enroll[d.c] = !S.enroll[d.c]; save(); render(); },
+  read: function () { var l = LS(V.cid, V.li); l.read = !l.read; save(); render(); },
+  saveNote: function () { LS(V.cid, V.li).note = val('note'); save(); render(); toast('已儲存'); },
+  saveHw: function (d) {
+    var hw = { see: val('hw-see'), prob: val('hw-prob'), act: val('hw-act') }, l = LS(V.cid, V.li);
+    if (d.d === '1') { if (cnt(hw.see) < 30 || cnt(hw.prob) < 30 || cnt(hw.act) < 30) { l.hw = Object.assign(l.hw || {}, hw); save(); return toast('每段至少 30 字，已先存成草稿'); } hw.done = true; hw.date = now().split(' ')[0]; }
+    else { hw.done = !!(l.hw && l.hw.done); hw.date = l.hw && l.hw.date; }
+    l.hw = hw; save(); render(); toast(d.d === '1' ? '作業已繳交，感謝主' : '草稿已儲存');
+  },
+  shareHw: function () { var c = course(V.cid), l = c.lessons[V.li], hw = LSr(V.cid, V.li).hw; share('【321學神院 作業】\n' + S.profile.name + '｜' + c.title + ' 第 ' + (V.li + 1) + ' 課 ' + l.t + '\n\n我的看見：\n' + hw.see + '\n\n我的問題：\n' + hw.prob + '\n\n我的行動：\n' + hw.act); },
+  quiz: function () { V.sub = 'quiz'; V.quizRes = null; render(); },
+  submitQuiz: function () {
+    var qz = course(V.cid).lessons[V.li].quiz, ans = [], ok = 0;
+    for (var i = 0; i < qz.length; i++) { var e = document.querySelector('input[name=q' + i + ']:checked'); if (!e) return toast('第 ' + (i + 1) + ' 題還沒作答'); ans.push(+e.value); if (+e.value === qz[i].a) ok++; }
+    var score = Math.round(ok / qz.length * 100), l = LS(V.cid, V.li); l.best = Math.max(l.best || 0, score); l.tries = (l.tries || 0) + 1; save(); V.quizRes = { score: score, ans: ans }; render();
+  },
+  saveAction: function () { S.action[curWeek()] = val('action'); save(); toast('已儲存，記得告訴你的同伴'); },
+  sign: function () { var c = val('sign-code'), w = curWeek(); if (!grp()) return toast('請先到設定填寫小組代碼'); var st = c === signCode(w, 'IN') ? '出席' : (c === signCode(w, 'MK') ? '補課' : null); if (!st) return toast('簽到碼不正確，請再確認'); S.sign[w] = { st: st, time: now() }; save(); render(); toast('簽到成功'); },
+  leave: function () { S.sign[curWeek()] = { st: '請假', time: now() }; save(); render(); toast('已記為請假，7 天內補課可改記補課'); },
+  unsign: function () { delete S.sign[curWeek()]; save(); render(); },
+  saveExam: function () { var sc = []; for (var i = 0; i < 9; i++) sc.push(+$('fr' + i).value); S.exam[curWeek()] = { sc: sc, self: val('ex-self'), th: val('ex-th') }; save(); render(); toast('已完成本週自省'); },
+  saveAcct: function () { S.acct[curWeek()] = { done: true, pray: val('ac-pray'), mine: val('ac-mine') }; save(); render(); toast('已完成本週問責'); },
+  shareOut: function () { share($('out').textContent); },
+  copyOut: function () { copy($('out').textContent); },
+  importRep: function (d) { var arr = decAll(val('paste')).filter(function (o) { return o.t === d.k; }); if (!arr.length) return toast('找不到可辨識的週報代碼'); arr.forEach(function (o) { S.agg[d.k][o.w + '|' + (o.t === 'G' ? o.g : o.n)] = o; }); save(); render(); toast('已匯入 ' + arr.length + ' 份週報'); },
+  saveRoster: function () { S.roster = $('roster').value; save(); render(); toast('名冊已儲存'); },
+  groupRep: function () { var w = V.rw || curWeek(); S.hi[w] = val('hi'); save(); share(groupReport(w)); },
+  taRep: function () { var w = V.rw || curWeek(); S.taNote[w] = { need: val('ta-need'), succ: val('ta-succ') }; save(); share(taReport(w)); },
+  copyForm: function (d) { copy(FORMS[+d.i].x); },
+  saveProfile: function () { var p = S.profile; p.name = val('s-name') || p.name; p.group = val('s-group'); p.partner = val('s-partner'); p.leader = val('s-leader'); p.ta = val('s-ta'); var t = val('s-term'); p.termStart = (t && t !== CONFIG.termStart) ? t : undefined; save(); V.open = null; V.tab = 'home'; render(); toast('已儲存'); },
+  exportBk: function () { copy('#321BK:' + btoa(unescape(encodeURIComponent(JSON.stringify(S))))); },
+  importBk: function () { var m = /#321BK:([A-Za-z0-9+\/=]+)/.exec(val('bk')); if (!m) return toast('找不到備份內容'); try { var o = JSON.parse(decodeURIComponent(escape(atob(m[1])))); if (!o.profile) throw 0; S = o; save(); location.reload(); } catch (e) { toast('備份內容無法讀取'); } },
+  reset: function () { if (confirm('確定清除這支手機上的全部學習紀錄嗎？此動作無法復原。')) { S = blank(); save(); V = { tab: 'home', obRole: 'student', mode: 'all' }; render(); } },
+  hashGen: function () { var c = val('hg'); $('hg-out').textContent = c ? '身分碼：' + c.toUpperCase() + '\n雜湊值：' + fnv(c.toUpperCase()) : ''; }
+};
+document.addEventListener('click', function (e) { var t = e.target.closest('[data-a]'); if (!t) return; var f = ACT[t.getAttribute('data-a')]; if (f) f(t.dataset, t); });
+document.addEventListener('input', function (e) { var t = e.target; if (t.id === 'q') { V.q = t.value.trim(); $('hits').innerHTML = hits(V.q); } else if (t.dataset.out) $(t.dataset.out).textContent = t.value; else if (t.dataset.cnt) updCnt(t); });
+document.addEventListener('change', function (e) { if (e.target.id === 'rw') { V.rw = +e.target.value; render(); } });
+render();
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(function () { });
+</script>
+</body>
+</html>
