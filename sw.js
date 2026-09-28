@@ -1,6 +1,6 @@
 /* 321學神院 Service Worker：網路優先，有新版就自動更新
    每次發布新版時，把下面的 VERSION 改成與 App 內 CONFIG.version 相同 */
-var VERSION = '1.4.1';
+var VERSION = '1.6.1';
 var CACHE = 'xsy321-' + VERSION;
 
 self.addEventListener('install', function (e) {
