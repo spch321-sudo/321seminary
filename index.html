@@ -102,6 +102,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .opt.right{background:var(--okbg)}
 .opt.wrong{background:var(--warnbg)}
 .exp{font-size:14px;color:var(--sub);margin:4px 0 0 8px}
+.upd{position:fixed;left:12px;right:12px;top:calc(58px + env(safe-area-inset-top));z-index:60;background:var(--gold);color:#fff;border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:14px;box-shadow:0 4px 14px rgba(0,0,0,.25)}.upd span{flex:1}.upd button{background:#fff;color:var(--navy);border:none;min-height:34px;padding:5px 12px;font-weight:700}
 .toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--navy);color:#fff;padding:9px 16px;border-radius:99px;font-size:14px;z-index:50;box-shadow:0 4px 14px rgba(0,0,0,.25);max-width:88vw;text-align:center}
 nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:30;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
 nav.tabs button{flex:1;border:none;background:none;border-radius:0;padding:7px 2px 6px;font-size:11px;color:var(--sub);display:flex;flex-direction:column;align-items:center;gap:1px;min-height:58px}
@@ -133,7 +134,7 @@ pre.out{white-space:pre-wrap;word-break:break-all;background:var(--bg);border:1p
 'use strict';
 /* ===================== 設定區（資訊組維護） ===================== */
 var CONFIG = {
-  version: '1.1.3',
+  version: '1.2.0',
   termName: '第一學期',
   termStart: '2026-10-05',          // 學期第1週的星期一，可在「設定」覆寫
   weeks: 12,
@@ -141,6 +142,8 @@ var CONFIG = {
   attendRate: 0.8,
   // 身分碼雜湊（以「設定 → 身分碼雜湊產生器」產生後貼上；每學期更換）
   codes: { leader: '3efab731', ta: '210ab38a', head: 'e33e674d' },
+  // 課程授權碼雜湊（學神院發給學員；學員輸入正確授權碼，該課程才會開啟）
+  courseCodes: {'idea1': '713ac03b', 'mark': 'd26d56db', 'theo1': '1e8c17b0', 'theo2': '4ca91629', 'theo3': '69fc9102', 'romans': 'ed4a801a', 'revelation': '633ff413', 'genesis': '061135aa', 'exodus': '057eec33', 'leadership': '5ebc8ce7', 'lead235': 'e1700d46', 'gospel': 'ca2fe3e1', 'care': '20f499b3', 'morning': 'f4094432', 'health': 'a7fcf76f', 'daily': 'c22887ff'},
   // 既有學習 App 連結（由資訊組填入網址，留空則不顯示按鈕）
   links: {}
 };
@@ -458,7 +461,7 @@ function rank() { return S.profile ? ROLES[S.profile.role].rank : 0; }
 function course(id) { for (var i = 0; i < COURSES.length; i++) if (COURSES[i].id === id) return COURSES[i]; }
 function LS(cid, i) { var k = cid + '-' + i; if (!S.lessons[k]) S.lessons[k] = {}; return S.lessons[k]; }
 function LSr(cid, i) { return S.lessons[cid + '-' + i] || {}; }
-function enrolled(c) { return c.mode === 'req' || !!S.enroll[c.id]; }
+function enrolled(c) { return !!(c && S.enroll[c.id]); }
 function hwDone(c, i) { var l = LSr(c.id, i); if (c.mode === 'self') return !!(l.note && l.note.length >= 5); var h = l.hw; return !!(h && h.done); }
 function quizDone(c, i) { var les = c.lessons[i]; if (!les.quiz) return true; var l = LSr(c.id, i); return (l.best || 0) >= CONFIG.passScore; }
 function lessonDone(c, i) { var l = LSr(c.id, i); return !!l.read && hwDone(c, i) && quizDone(c, i); }
@@ -531,16 +534,17 @@ function renderCourses() {
     var cs = COURSES.filter(function (c) { return c.cat === cat && (V.mode === 'all' || c.mode === V.mode); });
     if (!cs.length) return;
     h += '<h3>' + CATS[cat] + '</h3><div class="card" style="padding:4px 14px">';
-    cs.forEach(function (c) { var n = courseProg(c), all = c.lessons.length; h += '<div class="list-item' + (n === all ? ' done' : '') + '" data-a="course" data-c="' + c.id + '">' + appIcon(c.link, c.title.replace(/^321聖經講義：/, '')) + '<div class="grow"><b>' + esc(c.title) + '</b><br><span class="chip' + (c.mode === 'req' ? ' gold' : '') + '">' + MODES[c.mode] + '</span><span class="chip">' + c.credit + ' 學分</span>' + (enrolled(c) && c.mode !== 'req' ? '<span class="chip ok">已加選</span>' : '') + '<div class="bar"><i style="width:' + Math.round(n / all * 100) + '%"></i></div></div><div class="sub">' + n + '/' + all + ' ›</div></div>'; });
+    cs.forEach(function (c) { var n = courseProg(c), all = c.lessons.length; h += '<div class="list-item' + (n === all ? ' done' : '') + '" data-a="course" data-c="' + c.id + '">' + appIcon(c.link, c.title.replace(/^321聖經講義：/, '')) + '<div class="grow"><b>' + esc(c.title) + '</b><br><span class="chip' + (c.mode === 'req' ? ' gold' : '') + '">' + MODES[c.mode] + '</span><span class="chip">' + c.credit + ' 學分</span>' + (enrolled(c) ? '<span class="chip ok">已開通</span>' : '<span class="chip warn">🔒 未開通</span>') + '<div class="bar"><i style="width:' + Math.round(n / all * 100) + '%"></i></div></div><div class="sub">' + n + '/' + all + ' ›</div></div>'; });
     h += '</div>';
   });
   return h;
 }
 function renderCourse() {
-  var c = course(V.cid), url = c.link && CONFIG.links[c.link];
-  var h = '<button class="back" data-a="back">‹ 課程</button><div class="card">' + (c.link && APPICON[c.link] ? '<img class="aic big" src="' + APPICON[c.link] + '" alt="">' : '') + '<span class="chip gold">' + MODES[c.mode] + '</span><span class="chip">' + CATS[c.cat] + '</span><span class="chip">' + c.credit + ' 學分</span><h2 style="margin:6px 0">' + esc(c.title) + '</h2><p class="sub">' + esc(c.desc) + '</p>';
+  var c = course(V.cid), url = c.link && CONFIG.links[c.link], en = enrolled(c);
+  var h = '<button class="back" data-a="back">‹ 課程</button><div class="card">' + (c.link && APPICON[c.link] ? '<img class="aic big" src="' + APPICON[c.link] + '" alt="">' : '') + '<span class="chip gold">' + MODES[c.mode] + '</span><span class="chip">' + CATS[c.cat] + '</span><span class="chip">' + c.credit + ' 學分</span>' + (en ? '<span class="chip ok">已開通</span>' : '<span class="chip warn">🔒 未開通</span>') + '<h2 style="margin:6px 0">' + esc(c.title) + '</h2><p class="sub">' + esc(c.desc) + '</p>';
+  if (!en) return h + '</div><div class="card"><h3 style="margin-top:0">輸入授權碼開啟課程</h3><p class="sub">授權碼由學神院發給報名的學員。輸入正確的授權碼，這門課的課程內容與課程 App 才會開啟（不分大小寫）。</p><input type="text" id="cc" autocomplete="off" autocapitalize="characters" maxlength="12" placeholder="請輸入授權碼" style="text-align:center;font-size:22px;letter-spacing:4px"><button class="pri full" data-a="unlock" data-c="' + c.id + '">開啟這門課</button><p class="sub">還沒有授權碼？請向學神院（助教或負責人）索取。</p></div>';
   if (url) h += '<a class="btn" style="display:block;text-align:center;text-decoration:none" href="' + esc(url) + '" target="_blank" rel="noopener">開啟課程 App ↗</a>';
-  if (c.mode !== 'req') h += '<button class="full ' + (enrolled(c) ? '' : 'pri') + '" data-a="enroll" data-c="' + c.id + '">' + (enrolled(c) ? '已加選（點此退選）' : (c.mode === 'elec' ? '加選這門課' : '開始自修')) + '</button>';
+  if (c.mode !== 'req') h += '<button class="full ghost sm" data-a="lockCourse" data-c="' + c.id + '">退選這門課（之後需重新輸入授權碼）</button>';
   h += '</div><div class="card" style="padding:4px 14px">';
   c.lessons.forEach(function (l, i) { h += '<div class="list-item' + (lessonDone(c, i) ? ' done' : '') + '" data-a="lesson" data-c="' + c.id + '" data-i="' + i + '"><div class="n">' + (lessonDone(c, i) ? '✓' : i + 1) + '</div><div class="grow">' + esc(l.t) + (c.mode === 'req' ? '<br><span class="sub">第 ' + (i + 2) + ' 週</span>' : '') + '</div><div class="sub">›</div></div>'; });
   return h + '</div>';
@@ -731,7 +735,7 @@ function render() {
 function updCnt(t) { var o = $(t.getAttribute('data-cnt')); if (o) { var n = cnt(t.value); o.textContent = '（' + n + ' 字' + (n < 30 ? '，還差 ' + (30 - n) : ' ✓') + '）'; } }
 function go(to) {
   var a = to.split(':'); V.quizRes = null; V.open = null; V.sub = null;
-  if (a[0] === 'lesson') { V.tab = 'course'; V.sub = 'lesson'; V.cid = a[1]; V.li = +a[2]; }
+  if (a[0] === 'lesson') { V.tab = 'course'; V.cid = a[1]; if (enrolled(course(a[1]))) { V.sub = 'lesson'; V.li = +a[2]; } else { V.sub = 'course'; toast('請先輸入授權碼，才能開啟這門課'); } }
   else if (a[0] === 'course') { V.tab = 'course'; V.sub = 'course'; V.cid = a[1]; }
   else if (a[0] === 'group') { V.tab = 'group'; V.sub = a[1] || null; V.rw = null; }
   else { V.tab = a[0]; V.open = a[1] || null; }
@@ -748,7 +752,7 @@ var ACT = {
   backLesson: function () { V.sub = 'lesson'; V.quizRes = null; render(); },
   mode: function (d) { V.mode = d.m; render(); },
   course: function (d) { V.cid = d.c; V.sub = 'course'; render(); },
-  lesson: function (d) { V.cid = d.c; V.li = +d.i; V.sub = 'lesson'; render(); },
+  lesson: function (d) { V.cid = d.c; if (!enrolled(course(d.c))) return toast('請先輸入授權碼，才能開啟這門課'); V.li = +d.i; V.sub = 'lesson'; render(); },
   obRole: function (d) { V.obName = val('ob-name') || V.obName; V.obGroup = val('ob-group') || V.obGroup; V.obRole = d.r; if (S.profile) V.open = 'role'; render(); },
   obDone: function () {
     var n = val('ob-name'); if (!n) return toast('請輸入姓名');
@@ -756,7 +760,12 @@ var ACT = {
     S.profile = { name: n, role: V.obRole, group: val('ob-group'), partner: '', leader: '', ta: '' }; save(); V.tab = 'home'; render(); toast('歡迎，' + n);
   },
   changeRole: function () { if (!checkCode(V.obRole, val('ob-code'))) return toast('身分碼不正確'); S.profile.role = V.obRole; save(); IDX = null; V.tab = 'home'; V.open = null; render(); toast('角色已變更為' + ROLES[V.obRole].name); },
-  enroll: function (d) { S.enroll[d.c] = !S.enroll[d.c]; save(); render(); },
+  unlock: function (d) {
+    var code = val('cc').trim().toUpperCase(); if (!code) return toast('請輸入授權碼');
+    if (fnv(code) !== CONFIG.courseCodes[d.c]) return toast('授權碼不正確，請向學神院確認');
+    S.enroll[d.c] = true; save(); render(); toast('課程已開通，感謝主');
+  },
+  lockCourse: function (d) { if (confirm('確定退選這門課嗎？之後要再輸入授權碼才能開啟。')) { S.enroll[d.c] = false; save(); V.sub = 'course'; render(); } },
   read: function () { var l = LS(V.cid, V.li); l.read = !l.read; save(); render(); },
   saveNote: function () { LS(V.cid, V.li).note = val('note'); save(); render(); toast('已儲存'); },
   saveHw: function (d) {
@@ -795,7 +804,37 @@ document.addEventListener('click', function (e) { var t = e.target.closest('[dat
 document.addEventListener('input', function (e) { var t = e.target; if (t.id === 'q') { V.q = t.value.trim(); $('hits').innerHTML = hits(V.q); } else if (t.dataset.out) $(t.dataset.out).textContent = t.value; else if (t.dataset.cnt) updCnt(t); });
 document.addEventListener('change', function (e) { if (e.target.id === 'rw') { V.rw = +e.target.value; render(); } });
 render();
-if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(function () { });
+/* ===================== 自動更新 ===================== */
+var reloading = false;
+function typing() { var a = document.activeElement; return !!(a && (a.tagName === 'TEXTAREA' || a.tagName === 'INPUT') && a.value); }
+function applyUpdate() { if (reloading) return; reloading = true; save(); location.reload(); }
+function offerUpdate() {
+  if (reloading || document.querySelector('.upd')) return;
+  if (!typing()) { toast('發現新版本，正在更新…'); setTimeout(applyUpdate, 1200); return; }
+  var d = document.createElement('div'); d.className = 'upd'; d.innerHTML = '<span>有新版本了，你的學習紀錄會保留</span><button>立即更新</button>';
+  d.querySelector('button').onclick = applyUpdate; document.body.appendChild(d);
+}
+/* 1) 直接比對線上版本號：不靠 Service Worker 也能更新 */
+function checkVersion() {
+  if (location.protocol !== 'https:' && location.protocol !== 'http:') return;
+  fetch(location.pathname + '?v=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (t) {
+    var m = /version:\s*'([\d.]+)'/.exec(t); if (m && m[1] !== CONFIG.version) offerUpdate();
+  }).catch(function () { });
+}
+/* 2) Service Worker：有新版就立刻接手並重新載入 */
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(function (reg) {
+    function watch(w) { if (!w) return; w.addEventListener('statechange', function () { if (w.state === 'installed' && navigator.serviceWorker.controller) w.postMessage('SKIP_WAITING'); }); }
+    if (reg.waiting && navigator.serviceWorker.controller) reg.waiting.postMessage('SKIP_WAITING');
+    watch(reg.installing); reg.addEventListener('updatefound', function () { watch(reg.installing); });
+    setInterval(function () { reg.update().catch(function () { }); }, 3600000);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) reg.update().catch(function () { }); });
+  }).catch(function () { });
+  var hadCtl = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange', function () { if (hadCtl) offerUpdate(); hadCtl = true; });
+}
+checkVersion();
+document.addEventListener('visibilitychange', function () { if (!document.hidden) checkVersion(); });
 </script>
 </body>
 </html>
