@@ -134,7 +134,7 @@ pre.out{white-space:pre-wrap;word-break:break-all;background:var(--bg);border:1p
 'use strict';
 /* ===================== 設定區（資訊組維護） ===================== */
 var CONFIG = {
-  version: '1.7.2',
+  version: '1.7.3',
   termName: '第一學期',
   termStart: '2026-10-05',          // 學期第1週的星期一，可在「設定」覆寫
   weeks: 12,
@@ -750,7 +750,7 @@ function renderRoles() {
   h += ROLE_APPS.map(function (x) {
     var en = !!S.enroll[x.id];
     var c = '<div class="card"><div class="row" style="align-items:center;gap:10px">' + appIcon(x.id, x.name) + '<div class="grow"><b>' + esc(x.name) + '</b><br><span class="sub">' + esc(x.desc) + '</span></div>' + (en ? '<span class="chip ok">已開通</span>' : '<span class="chip warn">🔒 未開通</span>') + '</div>';
-    if (en) { c += '<a class="btn" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="' + esc(x.url) + '" target="_blank" rel="noopener">開啟' + esc(x.name) + ' ↗</a><button class="full ghost sm" data-a="lockRole" data-c="' + x.id + '">取消開通</button>'; }
+    if (en) { var ru = x.url + (x.url.indexOf('?') >= 0 ? '&' : '?') + 'code=' + encodeURIComponent((S.roleCode || {})[x.id] || ''); c += '<a class="btn" style="display:block;text-align:center;text-decoration:none;margin-top:10px" href="' + esc(ru) + '" target="_blank" rel="noopener">開啟' + esc(x.name) + ' ↗</a><button class="full ghost sm" data-a="lockRole" data-c="' + x.id + '">取消開通</button>'; }
     else { c += '<input type="text" id="cc-' + x.id + '" autocomplete="off" autocapitalize="characters" maxlength="12" placeholder="請輸入授權碼" style="margin-top:10px;text-align:center;font-size:20px;letter-spacing:3px"><button class="pri full" data-a="unlockRole" data-c="' + x.id + '">開啟這個職份</button>'; }
     return c + '</div>';
   }).join('');
@@ -804,9 +804,9 @@ var ACT = {
   unlockRole: function (d) {
     var code = val('cc-' + d.c).trim().toUpperCase(); if (!code) return toast('請輸入授權碼');
     if (fnv(code) !== CONFIG.courseCodes[d.c]) return toast('授權碼不正確，請向學神院確認');
-    S.enroll[d.c] = true; save(); render(); toast('已開通，感謝主');
+    S.enroll[d.c] = true; S.roleCode = S.roleCode || {}; S.roleCode[d.c] = code; save(); render(); toast('已開通，感謝主');
   },
-  lockRole: function (d) { if (confirm('確定取消開通嗎？之後要再輸入授權碼才能開啟。')) { S.enroll[d.c] = false; save(); render(); } },
+  lockRole: function (d) { if (confirm('確定取消開通嗎？之後要再輸入授權碼才能開啟。')) { S.enroll[d.c] = false; if (S.roleCode) delete S.roleCode[d.c]; save(); render(); } },
   read: function () { var l = LS(V.cid, V.li); l.read = !l.read; save(); render(); },
   saveNote: function () { LS(V.cid, V.li).note = val('note'); save(); render(); toast('已儲存'); },
   saveHw: function (d) {
