@@ -1,12 +1,12 @@
 /* 321學神院 Service Worker：網路優先，有新版就自動更新
    每次發布新版時，把下面的 VERSION 改成與 App 內 CONFIG.version 相同 */
-var VERSION = '1.8.3-k3m-vp1023';
+var VERSION = '1.8.4-k3m-vp1023';
 var CACHE = 'xsy321-' + VERSION;
 
 self.addEventListener('install', function (e) {
   self.skipWaiting();
   e.waitUntil(caches.open(CACHE).then(function (c) {
-    return c.addAll(['./', 'manifest.json', 'icon-192.png', 'icon-180.png']).catch(function () { });
+    return c.addAll(['./', 'manifest.json', 'icon-192.png', 'icon-180.png', 'coread.js', 'peerjs.min.js']).catch(function () { });
   }));
 });
 

@@ -134,7 +134,7 @@ pre.out{white-space:pre-wrap;word-break:break-all;background:var(--bg);border:1p
 'use strict';
 /* ===================== 設定區（資訊組維護） ===================== */
 var CONFIG = {
-  version: '1.8.2',
+  version: '1.8.4',
   termName: '第一學期',
   termStart: '2026-10-05',          // 學期第1週的星期一，可在「設定」覆寫
   weeks: 12,
@@ -861,6 +861,7 @@ function typing() { var a = document.activeElement; return !!(a && (a.tagName ==
 function applyUpdate() { if (reloading) return; reloading = true; save(); location.reload(); }
 function offerUpdate() {
   if (reloading || document.querySelector('.upd')) return;
+  if (window.CR && CR.on && CR.on()) return; /* 共讀中不被自動更新重載（共讀結束後下次檢查再更新） */
   if (!typing()) { toast('發現新版本，正在更新…'); setTimeout(applyUpdate, 1200); return; }
   var d = document.createElement('div'); d.className = 'upd'; d.innerHTML = '<span>有新版本了，你的學習紀錄會保留</span><button>立即更新</button>';
   d.querySelector('button').onclick = applyUpdate; document.body.appendChild(d);
@@ -3790,5 +3791,6 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
   window.VPICK321 = { pick: pick, card: card, lang: lang, detect: detect, refs: function (t) { return toc().then(function () { return refs(t); }); } };
 })();
 </script>
+<script src="coread.js?v=1.8.4"></script>
 </body>
 </html>
