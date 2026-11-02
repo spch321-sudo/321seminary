@@ -134,7 +134,7 @@ pre.out{white-space:pre-wrap;word-break:break-all;background:var(--bg);border:1p
 'use strict';
 /* ===================== 設定區（資訊組維護） ===================== */
 var CONFIG = {
-  version: '1.8.4',
+  version: '1.9.0',
   termName: '第一學期',
   termStart: '2026-10-05',          // 學期第1週的星期一，可在「設定」覆寫
   weeks: 12,
@@ -3791,6 +3791,11 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
   window.VPICK321 = { pick: pick, card: card, lang: lang, detect: detect, refs: function (t) { return toc().then(function () { return refs(t); }); } };
 })();
 </script>
-<script src="coread.js?v=1.8.4"></script>
+<script>window.XK_CFG={key:'sem321',name:'321學神院',brand:'#1F4D3D',root:'#root',blocks:'.verse,.card>p:not(.sub),.card li,details .body p,details .body li',
+ctx:function(){var h=document.querySelector('#root main h2');return h?h.textContent.replace(/\s+/g,' ').trim():''},
+sys:'你是「小智」，國度321空中團契「321學神院」App 裡的學習同伴，協助學員與組長理解課程（321聖經講義、學神神學、屬靈生活等）、完成作業與三段式反思、預備小組聚會與同伴問責。原則：制度是為了成全人，不是為了管人；次序是先與神、再與自己、再與人、後與事；鏡子不是尺，只與昨天的自己比。以321理念回應：三個基礎（耶穌是我的榜樣、聖經是我的準則、聖靈是我的引導）、兩個核心（讓耶穌作王、讓耶穌得著一切的榮耀）、一個目的（建立屬神的體系）；焦點在耶穌，不在自己、別人或環境。不替學員寫作業，改為引導他思考與真實分享；不評斷人。溫暖清晰、善用比喻；引用聖經一律用和合本；回答簡明，一律用繁體中文。',
+quick:['請用一個比喻幫我說明「無己」','這一課的重點，我可以怎麼用自己的話說出來？','三段式作業怎麼寫才真實，不流於漂亮？','小組聚會前，我要怎麼預備自己的心？','同伴問責的四句話，可以怎麼自然地問？','我總是讀不下去，怎麼開始每天親近神？','請給我一段勉勵學員的經文與祝福']};</script>
+<script src="xk321.js?v=1.9.0"></script>
+<script src="coread.js?v=1.9.0"></script>
 </body>
 </html>
