@@ -134,7 +134,7 @@ pre.out{white-space:pre-wrap;word-break:break-all;background:var(--bg);border:1p
 'use strict';
 /* ===================== 設定區（資訊組維護） ===================== */
 var CONFIG = {
-  version: '1.9.0-xz1103',
+  version: '1.9.1-xz1103',
   termName: '第一學期',
   termStart: '2026-10-05',          // 學期第1週的星期一，可在「設定」覆寫
   weeks: 12,
@@ -745,7 +745,8 @@ function renderData() {
   h += '<details id="role"' + op('role') + '><summary>變更角色（目前：' + ROLES[p.role].name + '）</summary><div class="body">' + rolePick(V.obRole) + '<label>身分碼（學員免填）</label><input type="password" id="ob-code" autocomplete="off"><p class="sub" style="margin-top:-4px">請向上一級同工索取；不分大小寫。</p><button class="navy full" data-a="changeRole">變更角色</button></div></details>';
   h += '<details id="backup"' + op('backup') + '><summary>備份與還原</summary><div class="body"><p class="sub">資料只存在這支手機。換手機前請匯出備份，傳給自己保存。</p><button class="full" data-a="exportBk">匯出備份（複製）</button><textarea id="bk" placeholder="把備份文字貼在這裡"></textarea><button class="full" data-a="importBk">匯入備份</button><button class="full" style="color:var(--warn)" data-a="reset">清除本機全部資料</button></div></details>';
   if (rk >= 3) h += '<details><summary>身分碼雜湊產生器（資訊組）</summary><div class="body"><p class="sub">輸入新的身分碼，把產生的雜湊值貼到程式碼 CONFIG.codes，再發布新版。</p><input type="text" id="hg" placeholder="新的身分碼"><button class="full" data-a="hashGen">產生雜湊</button><pre class="out" id="hg-out"></pre></div></details>';
-  return h + '<p class="sub center mt">321學神院 App v' + CONFIG.version + '<br>願人都尊主的名為聖</p>';
+  h += '<div class="row center mt"><button onclick="AUPD.check(true)">檢查更新</button> <button onclick="AUPD.force()">強制更新</button></div>';
+  return h + '<p class="sub center mt">321學神院 App v' + CONFIG.version + '<br>有新版時，在你不忙的時候會自動更新<br>願人都尊主的名為聖</p>';
 }
 
 /* ===================== 主畫面 ===================== */
@@ -855,38 +856,191 @@ document.addEventListener('click', function (e) { var t = e.target.closest('[dat
 document.addEventListener('input', function (e) { var t = e.target; if (t.id === 'q') { V.q = t.value.trim(); $('hits').innerHTML = hits(V.q); } else if (t.dataset.out) $(t.dataset.out).textContent = t.value; else if (t.dataset.cnt) updCnt(t); });
 document.addEventListener('change', function (e) { if (e.target.id === 'rw') { V.rw = +e.target.value; render(); } });
 render();
-/* ===================== 自動更新 ===================== */
+/* ===================== 自動更新（AUPD） =====================
+   原本：靠讀 index.html 比對版本號，沒有 version.json、沒有設定頁檢查更新、忙碌（朗讀、小智、輸入）結束後不會自動套用、沒有防無限重整。 */
 var reloading = false;
 function typing() { var a = document.activeElement; return !!(a && (a.tagName === 'TEXTAREA' || a.tagName === 'INPUT') && a.value); }
-function applyUpdate() { if (reloading) return; reloading = true; save(); location.reload(); }
-function offerUpdate() {
-  if (reloading || document.querySelector('.upd')) return;
-  if (window.CR && CR.on && CR.on()) return; /* 共讀中不被自動更新重載（共讀結束後下次檢查再更新） */
-  if (!typing()) { toast('發現新版本，正在更新…'); setTimeout(applyUpdate, 1200); return; }
-  var d = document.createElement('div'); d.className = 'upd'; d.innerHTML = '<span>有新版本了，你的學習紀錄會保留</span><button>立即更新</button>';
-  d.querySelector('button').onclick = applyUpdate; document.body.appendChild(d);
-}
-/* 1) 直接比對線上版本號：不靠 Service Worker 也能更新 */
-function checkVersion() {
-  if (location.protocol !== 'https:' && location.protocol !== 'http:') return;
-  fetch(location.pathname + '?v=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (t) {
-    var m = /version:\s*'([\d.]+)'/.exec(t); if (m && m[1] !== CONFIG.version) offerUpdate();
-  }).catch(function () { });
-}
-/* 2) Service Worker：有新版就立刻接手並重新載入 */
-if ('serviceWorker' in navigator && location.protocol === 'https:') {
-  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(function (reg) {
-    function watch(w) { if (!w) return; w.addEventListener('statechange', function () { if (w.state === 'installed' && navigator.serviceWorker.controller) w.postMessage('SKIP_WAITING'); }); }
-    if (reg.waiting && navigator.serviceWorker.controller) reg.waiting.postMessage('SKIP_WAITING');
-    watch(reg.installing); reg.addEventListener('updatefound', function () { watch(reg.installing); });
-    setInterval(function () { reg.update().catch(function () { }); }, 3600000);
-    document.addEventListener('visibilitychange', function () { if (!document.hidden) reg.update().catch(function () { }); });
-  }).catch(function () { });
-  var hadCtl = !!navigator.serviceWorker.controller;
-  navigator.serviceWorker.addEventListener('controllerchange', function () { if (hadCtl) offerUpdate(); hadCtl = true; });
-}
-checkVersion();
-document.addEventListener('visibilitychange', function () { if (!document.hidden) checkVersion(); });
+/* ---------- 自動更新 AUPD（ES5，321 系 App 共用）----------
+   偵測：載入後、回到前景、每 30 分鐘、恢復連線，讀 version.json（不吃快取）並呼叫 reg.update()。
+   套用：偵測到新版，空閒時自動換新（先要求瀏覽器重抓主要檔案 → 通知新 SW 接手 → 重整），不必按。
+        朗讀、錄音錄影、輸入框有未存內容、共讀、面板／工作室開著時只顯示「有新版本」更新條，空閒後自動套用。
+   防無限重整：同一個新版只自動重整一次；仍是舊檔就清自家快取硬更新一次；再不行只留更新條（可點）。 */
+var AUPD = (function () {
+  var CFG = {
+    ver: function () { return CONFIG.version; },
+    pfx: 'xsy321-',
+    sw: 'sw.js',
+    busy: function () { return typing(); },
+    toast: function (m) { toast(m); },
+    lang: function () { return ''; },
+    before: function () { save(); }
+  };
+  var U = { reg: null, target: '', pending: false, applying: 0, inited: 0 };
+  var TX = {
+    zh: { newVer: '有新版本，點一下立即更新', updating: '正在更新到新版…', latest: '目前已是最新版 v', found: '找到新版本，正在更新…', foundBusy: '找到新版本，忙完就會自動更新', netErr: '無法檢查更新，請確認網路', checking: '檢查更新中…', done: '已更新到新版 v' },
+    zs: { newVer: '有新版本，点一下立即更新', updating: '正在更新到新版…', latest: '目前已是最新版 v', found: '找到新版本，正在更新…', foundBusy: '找到新版本，忙完就会自动更新', netErr: '无法检查更新，请确认网络', checking: '检查更新中…', done: '已更新到新版 v' },
+    en: { newVer: 'A new version is ready. Tap to update', updating: 'Updating to the new version…', latest: 'You are on the latest version v', found: 'New version found, updating…', foundBusy: 'New version found. It will update when you are idle', netErr: 'Cannot check for updates. Please check your connection', checking: 'Checking for updates…', done: 'Updated to version ' }
+  };
+  function now() { return +new Date(); }
+  function ver() { try { return String(CFG.ver()); } catch (e) { return ''; } }
+  function lg() {
+    var l = ''; try { l = CFG.lang() || ''; } catch (e) { }
+    if (!l) l = document.documentElement.getAttribute('lang') || '';
+    if (/^en/i.test(l)) return 'en';
+    if (/hans|^zs|^sc|^zh-cn|^zh-sg/i.test(l)) return 'zs';
+    return 'zh';
+  }
+  function T(k) { return (TX[lg()] || TX.zh)[k]; }
+  function ssGet(k) { try { return sessionStorage.getItem(k) || ''; } catch (e) { return ''; } }
+  function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) { } }
+  function say(m) {
+    if (CFG.toast) { try { CFG.toast(m); return; } catch (e) { } }
+    var t = document.getElementById('aupd-toast');
+    if (!t) {
+      t = document.createElement('div'); t.id = 'aupd-toast';
+      t.style.cssText = 'position:fixed;left:50%;bottom:90px;transform:translateX(-50%);max-width:86vw;background:rgba(30,30,30,.92);color:#fff;padding:10px 16px;border-radius:12px;font-size:15px;z-index:2147483000;text-align:center';
+      document.body.appendChild(t);
+    }
+    t.textContent = m; t.style.display = 'block'; clearTimeout(say.tm); say.tm = setTimeout(function () { t.style.display = 'none'; }, 2600);
+  }
+  function busy() {
+    try { if (CFG.busy && CFG.busy()) return true; } catch (e) { }
+    try { if (window.CR) { var rl = window.CR.role; if (typeof rl === 'function') rl = rl(); if (rl || (typeof CR.on === 'function' && CR.on())) return true; } } catch (e) { }
+    try { if (window.CR321 && CR321.on && CR321.on()) return true; } catch (e) { }
+    try { if (window.MX && MX.busy && MX.busy()) return true; } catch (e) { }
+    try { if (window.speechSynthesis && speechSynthesis.speaking) return true; } catch (e) { }
+    try { var m = document.querySelectorAll('audio,video'); for (var i = 0; i < m.length; i++) { if (!m[i].paused && !m[i].ended && !m[i].muted && m[i].volume > 0) return true; } } catch (e) { }
+    try {
+      var a = document.activeElement;
+      if (a && (a.tagName === 'TEXTAREA' || (a.tagName === 'INPUT' && /^(text|search|url|email|tel|password|number|)$/i.test(a.type || '')) || a.isContentEditable) && (a.value || (a.isContentEditable && a.textContent))) return true;
+    } catch (e) { }
+    try { if (window.__recOn) return true; } catch (e) { }
+    try { if (document.querySelector('.rw-mask,.hlsheet-mask,.gxs-ov.on,.spk-now')) return true; } catch (e) { }
+    return false;
+  }
+  function bar(on) {
+    var b = document.getElementById('updbar');
+    if (!on) { if (b && b.parentNode) b.parentNode.removeChild(b); return; }
+    if (!b) {
+      b = document.createElement('div'); b.id = 'updbar'; b.className = 'updbar';
+      b.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:2147483000;background:#B98A2E;color:#fff;font-weight:700;text-align:center;font-size:15px;cursor:pointer;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top,0px))';
+      b.onclick = function () { apply(ssGet('auTry') === U.target); };
+      document.body.appendChild(b);
+    }
+    b.textContent = T('newVer');
+  }
+  function verFetch(ok, fail) {
+    var x = new XMLHttpRequest();
+    try { x.open('GET', 'version.json?t=' + now(), true); } catch (e) { if (fail) fail(); return; }
+    try { x.setRequestHeader('Cache-Control', 'no-cache'); } catch (e) { }
+    x.timeout = 15000;
+    x.onload = function () { if (x.status >= 200 && x.status < 300) { try { return ok(JSON.parse(x.responseText)); } catch (e) { } } if (fail) fail(); };
+    x.onerror = x.ontimeout = function () { if (fail) fail(); };
+    x.send();
+  }
+  function reloadFresh() {
+    if (window.__reloading) return; window.__reloading = 1;
+    var s = location.search.replace(/([?&])u=\d+&?/, '$1').replace(/[?&]$/, '');
+    s += (s ? '&' : '?') + 'u=' + now();
+    try { location.replace(location.pathname + s + location.hash); } catch (e) { location.reload(); }
+  }
+  /* 換新檔之前先叫瀏覽器重抓主要檔案，免得重整後又讀到 HTTP 快取裡的舊檔 */
+  function prefetch(cb) {
+    var done = 0, fin = function () { if (!done) { done = 1; cb(); } };
+    setTimeout(fin, 2500);
+    try {
+      var seen = {}, urls = [], add = function (u) { if (u && !seen[u]) { seen[u] = 1; urls.push(u); } };
+      add(location.pathname); add(CFG.sw);
+      var ss = document.getElementsByTagName('script');
+      for (var i = 0; i < ss.length; i++) { if (ss[i].src && ss[i].src.indexOf(location.origin) === 0) add(ss[i].src); }
+      Promise.all(urls.map(function (u) { return fetch(u, { cache: 'reload' })['catch'](function () { }); })).then(fin, fin);
+    } catch (e) { fin(); }
+  }
+  /* 重整前先登出本 App 的 Service Worker：新舊 SW 交接的瞬間導覽請求會被舊 SW 卡住（實測 8 秒以上、
+     甚至讀到舊頁），登出後導覽直接走網路，重整後新頁面會重新註冊乾淨的新 SW。 */
+  function dropSW(done) {
+    var fired = 0, fin = function () { if (!fired) { fired = 1; done(); } };
+    setTimeout(fin, 1500);
+    try {
+      if (navigator.serviceWorker && navigator.serviceWorker.getRegistration) navigator.serviceWorker.getRegistration().then(function (r) { return r && r.unregister(); }).then(fin, fin);
+      else fin();
+    } catch (e) { fin(); }
+  }
+  function apply(hard) {
+    if (U.applying) return; U.applying = 1; setTimeout(function () { U.applying = 0; }, 12000);
+    bar(false); say(T('updating'));
+    ssSet('auTry', U.target || 'x'); if (hard) ssSet('auHard', U.target || 'x');
+    try { CFG.before(); } catch (e) { }
+    prefetch(function () {
+      if (!hard) { dropSW(function () { setTimeout(reloadFresh, 100); }); return; }
+      var jobs = [], go = function () { setTimeout(reloadFresh, 100); };
+      try { if (window.caches && caches.keys) jobs.push(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return !CFG.pfx || k.indexOf(CFG.pfx) === 0; }).map(function (k) { return caches['delete'](k); })); })); } catch (e) { }
+      try { if (navigator.serviceWorker && navigator.serviceWorker.getRegistration) jobs.push(navigator.serviceWorker.getRegistration().then(function (r) { return r && r.unregister(); })); } catch (e) { }
+      if (window.Promise) Promise.all(jobs).then(go, go); else go();
+      setTimeout(go, 2000);
+    });
+  }
+  /* 空閒才套用；同一版：第一次一般更新、第二次硬更新、硬更新過仍是舊檔就只留更新條 */
+  function tick() {
+    if (!U.pending || busy()) return;
+    var v = U.target;
+    if (ssGet('auHard') === v) { U.pending = false; bar(true); return; }
+    apply(ssGet('auTry') === v);
+  }
+  function onNew(v) {
+    if (!v || v === ver()) return;
+    U.target = v; U.pending = true;
+    if (busy()) { bar(true); return; }
+    tick();
+  }
+  function check(manual) {
+    if (navigator.onLine === false) { if (manual) say(T('netErr')); return; }
+    if (manual) say(T('checking'));
+    try { if (U.reg) { var up = U.reg.update(); if (up && up['catch']) up['catch'](function () { }); } } catch (e) { }
+    verFetch(function (j) {
+      var v = j && (j.v || j.version); v = v ? String(v) : '';
+      if (v && v !== ver()) {
+        if (manual) { U.target = v; U.pending = false; say(T('found')); apply(ssGet('auTry') === v); }
+        else onNew(v);
+      } else if (manual) say(T('latest') + ver());
+    }, function () { if (manual) say(T('netErr')); });
+  }
+  function force() { U.target = U.target || 'force'; U.pending = false; apply(true); }
+  function register() {
+    if (!('serviceWorker' in navigator) || !/^https?:/.test(location.protocol)) return;
+    var sw = navigator.serviceWorker;
+    try {
+      sw.register(CFG.sw, { updateViaCache: 'none' }).then(function (reg) {
+        U.reg = reg;
+        var track = function (w) { if (w) w.addEventListener('statechange', function () { if (w.state === 'installed' && sw.controller) check(0); }); };
+        track(reg.installing); track(reg.waiting);
+        reg.addEventListener('updatefound', function () { track(reg.installing); });
+      })['catch'](function () { });
+    } catch (e) { }
+    /* 同網域的各 321 App 共用 origin，別支 App 的 SW 也可能廣播 sw-updated：只理會自己這支 sw.js 的通知，而且不直接相信版本字串，回頭讀 version.json 確認 */
+    sw.addEventListener('message', function (e) {
+      var d = e.data || {}; if (d.t !== 'sw-updated') return;
+      try { var src = e.source && e.source.scriptURL; if (src && src !== new URL(CFG.sw, location.href).href) return; } catch (x) { }
+      check(0);
+    });
+    sw.addEventListener('controllerchange', function () { if (U.target && !busy()) tick(); });
+  }
+  function init() {
+    if (U.inited) return; U.inited = 1;
+    if (!/^https?:/.test(location.protocol)) return;
+    try { if (/[?&]u=\d+/.test(location.search) && history.replaceState) { var s = location.search.replace(/([?&])u=\d+&?/, '$1').replace(/[?&]$/, ''); history.replaceState(null, '', location.pathname + s + location.hash); } } catch (e) { }
+    if (ssGet('auTry') && ssGet('auTry') === ver()) { ssSet('auTry', ''); ssSet('auHard', ''); setTimeout(function () { say(T('done') + ver()); }, 1200); }
+    register();
+    setTimeout(function () { check(0); }, 2500);
+    setInterval(function () { check(0); }, 30 * 60 * 1000);
+    setInterval(function () { if (U.pending) tick(); }, 15000);
+    document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') check(0); });
+    window.addEventListener('pageshow', function (e) { if (e.persisted) check(0); });
+    window.addEventListener('online', function () { check(0); });
+  }
+  return { init: init, check: check, force: force, tick: tick, busy: busy, ver: ver, state: U };
+})();
+AUPD.init();
 </script>
 <script id="gxuScript">/* ===== GXU 美圖工作室（獨立版，v1.3.202610201200）：不依賴本 App 的內部結構，自帶狀態、我的作品與入口 ===== */
 (function () {
@@ -3796,7 +3950,7 @@ ctx:function(){var h=document.querySelector('#root main h2');return h?h.textCont
 sys:'你是「小智」，國度321空中團契「321學神院」App 裡的學習同伴，協助學員與組長理解課程（321聖經講義、學神神學、屬靈生活等）、完成作業與三段式反思、預備小組聚會與同伴問責。原則：制度是為了成全人，不是為了管人；次序是先與神、再與自己、再與人、後與事；鏡子不是尺，只與昨天的自己比。以321理念回應：三個基礎（耶穌是我的榜樣、聖經是我的準則、聖靈是我的引導）、兩個核心（讓耶穌作王、讓耶穌得著一切的榮耀）、一個目的（建立屬神的體系）；焦點在耶穌，不在自己、別人或環境。不替學員寫作業，改為引導他思考與真實分享；不評斷人。溫暖清晰、善用比喻；引用聖經一律用和合本；回答簡明，一律用繁體中文。',
 quick:['請用一個比喻幫我說明「無己」','這一課的重點，我可以怎麼用自己的話說出來？','三段式作業怎麼寫才真實，不流於漂亮？','小組聚會前，我要怎麼預備自己的心？','同伴問責的四句話，可以怎麼自然地問？','我總是讀不下去，怎麼開始每天親近神？','請給我一段勉勵學員的經文與祝福']};</script>
 <script src="xz2.js?v=xz1103"></script>
-<script src="xk321.js?v=1.9.0-xz1103"></script>
-<script src="coread.js?v=1.9.0-xz1103"></script>
+<script src="xk321.js?v=1.9.1-xz1103"></script>
+<script src="coread.js?v=1.9.1-xz1103"></script>
 </body>
 </html>
